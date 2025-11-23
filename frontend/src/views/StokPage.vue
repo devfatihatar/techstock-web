@@ -2,20 +2,23 @@
   <div>
     <!-- Üst başlık -->
     <header class="mb-6 flex items-center justify-between">
-      <div>
-        <h1 class="text-2xl font-semibold text-slate-800">
-          Stok Yönetimi
-        </h1>
-        <p class="text-sm text-slate-500">
-          Simge Bilgisayar - Ürün giriş/çıkış takibi
-        </p>
-      </div>
+  <div>
+    <h1 class="text-2xl font-semibold text-slate-800">
+      Stok Yönetimi
+    </h1>
+    <p class="text-sm text-slate-500">
+      {{ settings.companyName }} - Ürün giriş/çıkış takibi
+    </p>
+  </div>
 
-      <div class="text-xs text-slate-500">
-        Kullanıcı:
-        <span class="font-medium text-slate-700">Fatih</span>
-      </div>
-    </header>
+  <div class="text-xs text-slate-500">
+    Kullanıcı:
+    <span class="font-medium text-slate-700">
+      {{ settings.userName }}
+    </span>
+  </div>
+</header>
+
 
     <!-- Üstte özet kartlar -->
     <section class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
@@ -301,7 +304,24 @@ import ProductForm from "../components/ProductForm.vue";
 
 const STORAGE_KEY = "simge-products";
 const LOW_STOCK_THRESHOLD = 3; // 3 ve altı "düşük stok"
+const SETTINGS_STORAGE_KEY = "simge-settings";
 
+const settings = ref({
+  companyName: "Simge Bilgisayar",
+  userName: "Fatih",
+});
+ const storedSettings = localStorage.getItem(SETTINGS_STORAGE_KEY);
+  if (storedSettings) {
+    try {
+      const parsed = JSON.parse(storedSettings);
+      settings.value = {
+        ...settings.value,
+        ...parsed,
+      };
+    } catch (e) {
+      console.error("Settings parse error:", e);
+    }
+  }
 // ürün listesi
 const products = ref([]);
 

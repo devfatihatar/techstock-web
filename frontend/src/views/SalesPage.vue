@@ -1,16 +1,33 @@
 <template>
-  <div>
+  <div class="pb-24 min-h-[130vh]">
+
     <!-- Üst başlık -->
     <header class="mb-6 flex items-center justify-between">
-      <h1 class="text-2xl font-semibold text-slate-800">Satış Yap</h1>
+  <div>
+    <h1 class="text-2xl font-semibold text-slate-800">
+      Satış Yap
+    </h1>
+    <p class="text-sm text-slate-500">
+      {{ settings.companyName }} - Satış ve ciro takibi
+    </p>
+  </div>
 
-      <div class="text-xs text-slate-500">
-        Tarih:
-        <span class="font-medium text-slate-700">
-          {{ todayReadable }}
-        </span>
-      </div>
-    </header>
+  <div class="text-xs text-slate-500 text-right">
+    <div>
+      Kullanıcı:
+      <span class="font-medium text-slate-700">
+        {{ settings.userName }}
+      </span>
+    </div>
+    <div>
+      Tarih:
+      <span class="font-medium text-slate-700">
+        {{ todayReadable }}
+      </span>
+    </div>
+  </div>
+</header>
+
 
     <!-- Özet kartlar -->
     <section class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -169,55 +186,50 @@
           </tbody>
         </table>
       </div>
+      
     </section>
+<section class="mt-8 bg-white rounded-xl shadow p-4 text-sm min-h-[550px]">
 
-    <!-- 📊 Satış Raporları -->
-    <section class="mt-8 bg-white rounded-xl shadow p-4 text-sm">
-      <div class="flex items-center justify-between mb-3">
-        <h2 class="text-base font-semibold text-slate-800">
-          Son 7 Günlük Satış Raporu
-        </h2>
+  <div class="flex items-center justify-between mb-3">
+    <h2 class="text-base font-semibold text-slate-800">
+      Son 7 Günlük Satış Raporu
+    </h2>
 
-        <p class="text-xs text-slate-500">
-          Bu ay toplam ciro:
-          <span class="font-semibold text-slate-800">
-            {{ currentMonthTotal.toLocaleString("tr-TR") }} ₺
-          </span>
-        </p>
+    <p class="text-xs text-slate-500">
+      Bu ay toplam ciro:
+      <span class="font-semibold text-slate-800">
+        {{ currentMonthTotal.toLocaleString('tr-TR') }} ₺
+      </span>
+    </p>
+  </div>
+
+  <div v-if="last7DaysReports.length === 0" class="text-slate-500">
+    Henüz raporlanacak satış bulunmuyor.
+  </div>
+
+  <template v-else>
+    <table
+      class="w-full text-left text-xs border-collapse"
+    >
+      <!-- tablo aynı kalsın -->
+      <!-- ... -->
+    </table>
+
+    <!-- TABLONUN ALTINA GRAFİĞİ EKLİYORUZ -->
+    <div class="mt-6 border-t pt-4">
+      <h3 class="text-xs font-semibold text-slate-700 mb-2">
+        Ciro grafiği (son 7 gün)
+      </h3>
+      <div class="h-32 md:h-40">
+        <BarChart
+          :chartData="barChartData"
+          :options="barChartOptions"
+        />
       </div>
-
-      <div v-if="last7DaysReports.length === 0" class="text-slate-500">
-        Henüz raporlanacak satış bulunmuyor.
-      </div>
-
-      <table v-else class="w-full text-left text-xs border-collapse">
-        <thead>
-          <tr class="border-b text-slate-500">
-            <th class="py-2">Tarih</th>
-            <th class="py-2">Satış Adedi</th>
-            <th class="py-2">Günlük Ciro</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="r in last7DaysReports"
-            :key="r.date"
-            class="border-b last:border-0 text-slate-700"
-          >
-            <td class="py-2 pr-2">
-              {{ new Date(r.date).toLocaleDateString("tr-TR") }}
-            </td>
-            <td class="py-2 pr-2">
-              {{ r.count }}
-            </td>
-            <td class="py-2 pr-2">{{ r.total.toLocaleString("tr-TR") }} ₺</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-    <div class="h-40 md:h-56">
-      <BarChart :chartData="barChartData" :options="barChartOptions" />
     </div>
+  </template>
+</section>
+
   </div>
   <!-- 🧾 Geçmiş satışlar modalı -->
   <div
@@ -340,7 +352,7 @@
               <td class="py-2 pr-2">{{ sale.customer || "-" }}</td>
             </tr>
           </tbody>
-        </table>
+        </table>     
       </div>
     </div>
   </div>
@@ -453,6 +465,24 @@ const currentMonthTotal = computed(() =>
   }, 0)
 );
 const STORAGE_KEY = "simge-sales";
+const SETTINGS_STORAGE_KEY = "simge-settings";
+
+const settings = ref({
+  companyName: "Simge Bilgisayar",
+  userName: "Fatih",
+});
+  const storedSettings = localStorage.getItem(SETTINGS_STORAGE_KEY);
+  if (storedSettings) {
+    try {
+      const parsed = JSON.parse(storedSettings);
+      settings.value = {
+        ...settings.value,
+        ...parsed,
+      };
+    } catch (e) {
+      console.error("Settings parse error:", e);
+    }
+  }
 
 // 🟩 SATIŞ FORMU
 const saleForm = ref({

@@ -48,17 +48,39 @@
         </div>
       </div>
 
-      <div>
-        <label class="block text-sm font-medium mb-1">
-          Tedarikçi
-        </label>
-        <input
-          v-model="form.supplier"
-          type="text"
-          class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Örn: Simge Bilgisayar Merkez"
-        />
-      </div>
+     <div>
+  <label class="block text-sm font-medium mb-1">
+    Tedarikçi
+  </label>
+
+  <select
+    v-model="form.supplier"
+    class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+  >
+    <option value="" disabled>
+      Tedarikçi seçin...
+    </option>
+
+    <option
+      v-for="s in suppliers"
+      :key="s.id"
+      :value="s.companyName"
+    >
+      {{ s.companyName }} 
+      <span v-if="s.contactName">
+        - {{ s.contactName }}
+      </span>
+    </option>
+  </select>
+
+  <p
+    v-if="suppliers.length === 0"
+    class="mt-1 text-[11px] text-slate-500"
+  >
+    Henüz tedarikçi eklenmemiş. "Tedarikçiler" sekmesinden ekleyebilirsiniz.
+  </p>
+</div>
+
 
       <button
         type="submit"
@@ -71,7 +93,20 @@
 </template>
 
 <script setup>
-import { reactive } from "vue";
+import { reactive, ref, onMounted } from "vue";
+const SUPPLIERS_STORAGE_KEY = "simge-suppliers";
+const suppliers = ref([]);
+
+onMounted(() => {
+  const stored = localStorage.getItem(SUPPLIERS_STORAGE_KEY);
+  if (stored) {
+    try {
+      suppliers.value = JSON.parse(stored);
+    } catch (e) {
+      console.error("Suppliers parse error in ProductForm:", e);
+    }
+  }
+});
 
 // Bu component "dışarıya haber" yollayabiliyor
 const emit = defineEmits(["add-product"]);
