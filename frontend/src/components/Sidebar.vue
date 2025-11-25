@@ -3,51 +3,56 @@
     <h1 class="text-2xl font-bold mb-8">TechStock</h1>
 
     <nav>
-      <ul class="space-y-3 text-sm">
-        <li
-          class="cursor-pointer rounded-md px-3 py-2"
-          :class="
-            props.activePage === 'stok' ? 'bg-slate-800' : 'hover:bg-slate-800'
-          "
-          @click="changePage('stok')"
-        >
-          Ürünler
-        </li>
+     <ul class="space-y-3 text-sm">
+  <li
+    class="cursor-pointer rounded-md px-3 py-2"
+    :class="props.activePage === 'stok' ? 'bg-slate-800' : 'hover:bg-slate-800'"
+    @click="changePage('stok')"
+  >
+    Ürünler
+  </li>
 
-        <li
-          class="cursor-pointer rounded-md px-3 py-2"
-          :class="
-            props.activePage === 'satis' ? 'bg-slate-800' : 'hover:bg-slate-800'
-          "
-          @click="changePage('satis')"
-        >
-          Satış Yap
-        </li>
+  <li
+    class="cursor-pointer rounded-md px-3 py-2"
+    :class="props.activePage === 'devices' ? 'bg-slate-800' : 'hover:bg-slate-800'"
+    @click="changePage('devices')"
+  >
+    Cihazlar
+  </li>
 
-        
-        <li
-          class="cursor-pointer rounded-md px-3 py-2"
-          :class="
-            props.activePage === 'suppliers'
-              ? 'bg-slate-800'
-              : 'hover:bg-slate-800'
-          "
-          @click="changePage('suppliers')"
-        >
-          Tedarikçiler
-        </li>
-        <li
-          class="cursor-pointer rounded-md px-3 py-2"
-          :class="
-            props.activePage === 'settings'
-              ? 'bg-slate-800'
-              : 'hover:bg-slate-800'
-          "
-          @click="changePage('settings')"
-        >
-          Ayarlar
-        </li>
-      </ul>
+  <li
+    class="cursor-pointer rounded-md px-3 py-2"
+    :class="props.activePage === 'repairs' ? 'bg-slate-800' : 'hover:bg-slate-800'"
+    @click="changePage('repairs')"
+  >
+    Tamirler
+  </li>
+
+  <li
+    class="cursor-pointer rounded-md px-3 py-2"
+    :class="props.activePage === 'satis' ? 'bg-slate-800' : 'hover:bg-slate-800'"
+    @click="changePage('satis')"
+  >
+    Satış Yap
+  </li>
+
+  <li
+    class="cursor-pointer rounded-md px-3 py-2"
+    :class="props.activePage === 'suppliers' ? 'bg-slate-800' : 'hover:bg-slate-800'"
+    @click="changePage('suppliers')"
+  >
+    Tedarikçiler
+  </li>
+
+  <li
+    class="cursor-pointer rounded-md px-3 py-2"
+    :class="props.activePage === 'settings' ? 'bg-slate-800' : 'hover:bg-slate-800'"
+    @click="changePage('settings')"
+  >
+    Ayarlar
+  </li>
+</ul>
+
     </nav>
   </aside>
 </template>

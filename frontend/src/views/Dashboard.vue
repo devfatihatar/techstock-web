@@ -30,14 +30,19 @@ import StokPage from "./StokPage.vue";
 import SalesPage from "./SalesPage.vue";
 import SuppliersPage from "./SuppliersPage.vue";
 import SettingsPage from "./SettingsPage.vue";
+import DevicesPage from "./DevicesPage.vue";
+import RepairsPage from "./RepairsPage.vue";
 
 const activePage = ref("stok");
 
 const activeComponent = computed(() => {
   if (activePage.value === "satis") return SalesPage;
+  if (activePage.value === "devices") return DevicesPage;
+  if (activePage.value === "repairs") return RepairsPage;
   if (activePage.value === "suppliers") return SuppliersPage;
   if (activePage.value === "settings") return SettingsPage;
-  return StokPage; // varsayılan: ürünler
+  return StokPage; // varsayılan: Ürünler
 });
+
 
 </script>
