@@ -1,26 +1,35 @@
 <template>
   <div class="pb-10">
-    <header class="mb-6 flex items-center justify-between">
+    <!-- ÜST BAR -->
+    <header
+      class="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between"
+    >
       <div>
-        <h1 class="text-2xl font-semibold text-slate-800">
+        <h1 class="text-xl md:text-2xl font-semibold text-slate-800">
           Tamirler
         </h1>
-        <p class="text-sm text-slate-500">
+        <p class="text-xs md:text-sm text-slate-500">
           Cihaz tamir süreçlerini, durumlarını ve ücretlerini takip edin.
         </p>
       </div>
 
       <!-- Sağ üst: durum filtreleri + Geçmiş Tamirler butonu -->
-      <div class="flex items-center gap-3">
+      <div
+        class="flex flex-col items-stretch sm:flex-row sm:items-center gap-3"
+      >
         <!-- Durum filtreleri -->
-        <div class="inline-flex items-center bg-slate-100 rounded-full p-1 text-xs">
+        <div
+          class="inline-flex flex-wrap items-center bg-slate-100 rounded-full p-1 text-[11px] sm:text-xs"
+        >
           <button
             type="button"
             @click="currentStatusFilter = 'all'"
             class="px-3 py-1 rounded-full transition"
-            :class="currentStatusFilter === 'all'
-              ? 'bg-white shadow-sm text-slate-900'
-              : 'text-slate-600 hover:text-slate-900'"
+            :class="
+              currentStatusFilter === 'all'
+                ? 'bg-white shadow-sm text-slate-900'
+                : 'text-slate-600 hover:text-slate-900'
+            "
           >
             Tümü
           </button>
@@ -28,9 +37,11 @@
             type="button"
             @click="currentStatusFilter = 'bekleyen'"
             class="px-3 py-1 rounded-full transition"
-            :class="currentStatusFilter === 'bekleyen'
-              ? 'bg-white shadow-sm text-slate-900'
-              : 'text-slate-600 hover:text-slate-900'"
+            :class="
+              currentStatusFilter === 'bekleyen'
+                ? 'bg-white shadow-sm text-slate-900'
+                : 'text-slate-600 hover:text-slate-900'
+            "
           >
             Bekleyen
           </button>
@@ -38,9 +49,11 @@
             type="button"
             @click="currentStatusFilter = 'tamir'"
             class="px-3 py-1 rounded-full transition"
-            :class="currentStatusFilter === 'tamir'
-              ? 'bg-white shadow-sm text-slate-900'
-              : 'text-slate-600 hover:text-slate-900'"
+            :class="
+              currentStatusFilter === 'tamir'
+                ? 'bg-white shadow-sm text-slate-900'
+                : 'text-slate-600 hover:text-slate-900'
+            "
           >
             Tamirde
           </button>
@@ -48,9 +61,11 @@
             type="button"
             @click="currentStatusFilter = 'tamamlandi'"
             class="px-3 py-1 rounded-full transition"
-            :class="currentStatusFilter === 'tamamlandi'
-              ? 'bg-white shadow-sm text-slate-900'
-              : 'text-slate-600 hover:text-slate-900'"
+            :class="
+              currentStatusFilter === 'tamamlandi'
+                ? 'bg-white shadow-sm text-slate-900'
+                : 'text-slate-600 hover:text-slate-900'
+            "
           >
             Tamamlandı
           </button>
@@ -60,64 +75,100 @@
         <button
           type="button"
           @click="showHistoryModal = true"
-          class="text-xs px-3.5 py-2 rounded-md bg-slate-900 text-white hover:bg-slate-800 shadow-sm flex items-center gap-1"
+          class="text-xs px-3.5 py-2 rounded-md bg-slate-900 text-white hover:bg-slate-800 shadow-sm flex items-center justify-center gap-1"
         >
           <span>Geçmiş Tamirler</span>
         </button>
       </div>
     </header>
 
-    <!-- 🔹 Mini dashboard (yan yana kutular) -->
+    <!-- Mini dashboard (yan yana kutular) -->
     <div class="w-full flex flex-wrap gap-4 mb-6">
       <!-- Aktif tamirler -->
-      <div class="flex items-center gap-3 bg-white border border-slate-200 rounded-lg shadow p-3 flex-1 min-w-[200px]">
-        <div class="w-10 h-10 bg-slate-900 text-white rounded-full flex items-center justify-center text-lg">🛠️</div>
+      <div
+        class="flex items-center gap-3 bg-white border border-slate-200 rounded-lg shadow p-3 flex-1 min-w-[160px] sm:min-w-[200px]"
+      >
+        <div
+          class="w-10 h-10 bg-slate-900 text-white rounded-full flex items-center justify-center text-lg"
+        >
+          🛠️
+        </div>
         <div>
-          <div class="text-xs text-slate-500">Aktif tamirler</div>
-          <div class="text-xl font-semibold">{{ totalActiveRepairs }}</div>
+          <div class="text-[11px] text-slate-500">Aktif tamirler</div>
+          <div class="text-lg md:text-xl font-semibold">
+            {{ totalActiveRepairs }}
+          </div>
         </div>
       </div>
 
       <!-- Bekleyen tamirler -->
-      <div class="flex items-center gap-3 bg-white border border-slate-200 rounded-lg shadow p-3 flex-1 min-w-[200px]">
-        <div class="w-10 h-10 bg-orange-500 text-white rounded-full flex items-center justify-center text-lg">⏳</div>
+      <div
+        class="flex items-center gap-3 bg-white border border-slate-200 rounded-lg shadow p-3 flex-1 min-w-[160px] sm:min-w-[200px]"
+      >
+        <div
+          class="w-10 h-10 bg-orange-500 text-white rounded-full flex items-center justify-center text-lg"
+        >
+          ⏳
+        </div>
         <div>
-          <div class="text-xs text-slate-500">Bekleyen</div>
-          <div class="text-xl font-semibold">{{ totalWaitingRepairs }}</div>
+          <div class="text-[11px] text-slate-500">Bekleyen</div>
+          <div class="text-lg md:text-xl font-semibold">
+            {{ totalWaitingRepairs }}
+          </div>
         </div>
       </div>
 
       <!-- Serviste / Parça bekleyen -->
-      <div class="flex items-center gap-3 bg-white border border-slate-200 rounded-lg shadow p-3 flex-1 min-w-[200px]">
-        <div class="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center text-lg">🔧</div>
+      <div
+        class="flex items-center gap-3 bg-white border border-slate-200 rounded-lg shadow p-3 flex-1 min-w-[160px] sm:min-w-[200px]"
+      >
+        <div
+          class="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center text-lg"
+        >
+          🔧
+        </div>
         <div>
-          <div class="text-xs text-slate-500">Tamirde</div>
-          <div class="text-xl font-semibold">{{ totalInServiceRepairs }}</div>
+          <div class="text-[11px] text-slate-500">Tamirde</div>
+          <div class="text-lg md:text-xl font-semibold">
+            {{ totalInServiceRepairs }}
+          </div>
         </div>
       </div>
 
       <!-- Geçmiş tamirler -->
-      <div class="flex items-center gap-3 bg-white border border-slate-200 rounded-lg shadow p-3 flex-1 min-w-[200px]">
-        <div class="w-10 h-10 bg-green-600 text-white rounded-full flex items-center justify-center text-lg">📦</div>
+      <div
+        class="flex items-center gap-3 bg-white border border-slate-200 rounded-lg shadow p-3 flex-1 min-w-[160px] sm:min-w-[200px]"
+      >
+        <div
+          class="w-10 h-10 bg-green-600 text-white rounded-full flex items-center justify-center text-lg"
+        >
+          📦
+        </div>
         <div>
-          <div class="text-xs text-slate-500">Geçmiş tamirler</div>
-          <div class="text-xl font-semibold">{{ totalArchivedRepairs }}</div>
+          <div class="text-[11px] text-slate-500">Geçmiş tamirler</div>
+          <div class="text-lg md:text-xl font-semibold">
+            {{ totalArchivedRepairs }}
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Ana layout: Sol form + Sağ liste -->
-    <section class="flex gap-6">
+    <!-- ANA LAYOUT: Sol form + Sağ liste -->
+    <section class="flex flex-col lg:flex-row gap-6">
       <!-- Sol: Tamir ekleme / düzenleme formu -->
-      <div class="bg-white rounded-xl shadow p-6 w-full max-w-xl text-sm">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-base font-semibold">
+      <div
+        class="bg-white rounded-xl shadow p-4 sm:p-6 w-full lg:max-w-xl text-sm"
+      >
+        <div
+          class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2"
+        >
+          <h2 class="text-sm sm:text-base font-semibold">
             {{ editingRepairId ? "Tamir Kaydı Düzenle" : "Yeni Tamir Kaydı" }}
           </h2>
 
           <span
             v-if="editingRepairId"
-            class="text-[11px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-300"
+            class="text-[11px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-300 self-start sm:self-auto"
           >
             Düzenleme modu
           </span>
@@ -134,17 +185,11 @@
               v-model.number="repairForm.deviceId"
               class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
             >
-              <option :value="null" disabled>
-                Cihaz seçin...
-              </option>
+              <option :value="null" disabled>Cihaz seçin...</option>
 
-              <option
-                v-for="d in devices"
-                :key="d.id"
-                :value="d.id"
-              >
-                {{ d.customerName || "Müşteri" }} -
-                {{ d.type }} {{ d.brand }} {{ d.model }}
+               <option v-for="d in selectableDevices" :key="d.id" :value="d.id">
+                {{ d.customerName || "Müşteri" }} - {{ d.type }} {{ d.brand }}
+                {{ d.model }}
               </option>
             </select>
 
@@ -189,7 +234,7 @@
           </div>
 
           <!-- Ücret + Durum -->
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-sm font-medium mb-1">
                 Tahmini Ücret (₺)
@@ -204,9 +249,7 @@
             </div>
 
             <div>
-              <label class="block text-sm font-medium mb-1">
-                Durum
-              </label>
+              <label class="block text-sm font-medium mb-1">Durum</label>
               <select
                 v-model="repairForm.status"
                 class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
@@ -220,7 +263,7 @@
             </div>
           </div>
 
-          <div class="flex gap-2 mt-2">
+          <div class="flex flex-col sm:flex-row gap-2 mt-2">
             <button
               @click="saveRepair"
               class="flex-1 bg-slate-900 text-white font-medium py-2.5 rounded-md text-sm hover:bg-slate-800 active:scale-[0.99] transition"
@@ -241,97 +284,108 @@
       </div>
 
       <!-- Sağ: Tamir listesi -->
-      <div class="flex-1 bg-white rounded-xl shadow p-4 text-sm">
-        <div class="flex items-center justify-between mb-3 gap-3">
-          <h2 class="text-base font-semibold text-slate-800">
+      <div class="flex-1 bg-white rounded-xl shadow p-3 sm:p-4 text-sm">
+        <div
+          class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 gap-2"
+        >
+          <h2 class="text-sm sm:text-base font-semibold text-slate-800">
             Tamir Kayıtları
           </h2>
 
           <input
             v-model="searchTerm"
             type="text"
-            class="border rounded-md px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="border rounded-md px-2 py-1 text-[11px] sm:text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-64"
             placeholder="Müşteri, cihaz veya durum ara..."
           />
         </div>
 
-        <div v-if="filteredRepairs.length === 0" class="text-slate-500">
+        <div
+          v-if="filteredRepairs.length === 0"
+          class="text-slate-500 text-xs sm:text-sm"
+        >
           Henüz tamir kaydı yok veya aramaya uygun kayıt bulunamadı.
         </div>
 
         <div v-else class="max-h-[420px] overflow-y-auto">
-          <table class="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr class="border-b text-slate-500">
-                <th class="py-2">Tarih</th>
-                <th class="py-2">Müşteri</th>
-                <th class="py-2">Cihaz</th>
-                <th class="py-2">Durum</th>
-                <th class="py-2">Tahmini Ücret</th>
-                <th class="py-2 text-right">İşlemler</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="(r, idx) in filteredRepairs"
-                :key="r?.id || idx"
-                class="border-b last:border-0 text-slate-700 align-top"
-              >
-                <td class="py-2 pr-2">
-                  {{ new Date(r.createdAt).toLocaleDateString("tr-TR") }}
-                </td>
-                <td class="py-2 pr-2">
-                  <div class="font-semibold">
-                    {{ r.customerName || "-" }}
-                  </div>
-                  <div
-                    v-if="r.customerPhone"
-                    class="text-[11px] text-slate-500"
-                  >
-                    {{ r.customerPhone }}
-                  </div>
-                </td>
-                <td class="py-2 pr-2">
-                  <div class="font-semibold">
-                    {{ r.deviceInfo }}
-                  </div>
-                  <div
-                    v-if="r.problem"
-                    class="text-[11px] text-slate-500 mt-1"
-                  >
-                    {{ r.problem }}
-                  </div>
-                </td>
-                <td class="py-2 pr-2">
-                  <span
-                    class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px]"
-                    :class="statusClass(r.status)"
-                  >
-                    {{ r.status }}
-                  </span>
-                </td>
-                <td class="py-2 pr-2">
-                  <span
-                    v-if="r.estimatedCost !== null && r.estimatedCost !== undefined"
-                  >
-                    {{
-                      Number(r.estimatedCost).toLocaleString("tr-TR")
-                    }} ₺
-                  </span>
-                  <span v-else>-</span>
-                </td>
-                <td class="py-2 pl-2 text-right">
-                  <button
-                    type="button"
-                    @click="startEditRepair(r)"
-                    class="inline-flex items-center px-2 py-1 text-[11px] rounded-md border border-slate-300 hover:bg-slate-50"
-                  >
-                    Düzenle
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <!-- Mobilde yatay kaydırılabilir tablo -->
+          <div class="overflow-x-auto">
+            <table
+              class="w-full min-w-[720px] text-left text-[11px] sm:text-xs border-collapse"
+            >
+              <thead>
+                <tr class="border-b text-slate-500">
+                  <th class="py-2 pr-2">Tarih</th>
+                  <th class="py-2 pr-2">Müşteri</th>
+                  <th class="py-2 pr-2">Cihaz</th>
+                  <th class="py-2 pr-2">Durum</th>
+                  <th class="py-2 pr-2">Tahmini Ücret</th>
+                  <th class="py-2 pl-2 text-right">İşlemler</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="(r, idx) in filteredRepairs"
+                  :key="r?.id || idx"
+                  class="border-b last:border-0 text-slate-700 align-top"
+                >
+                  <td class="py-2 pr-2">
+                    {{ new Date(r.createdAt).toLocaleDateString("tr-TR") }}
+                  </td>
+                  <td class="py-2 pr-2">
+                    <div class="font-semibold">
+                      {{ r.customerName || "-" }}
+                    </div>
+                    <div
+                      v-if="r.customerPhone"
+                      class="text-[11px] text-slate-500"
+                    >
+                      {{ r.customerPhone }}
+                    </div>
+                  </td>
+                  <td class="py-2 pr-2">
+                    <div class="font-semibold">
+                      {{ r.deviceInfo }}
+                    </div>
+                    <div
+                      v-if="r.problem"
+                      class="text-[11px] text-slate-500 mt-1"
+                    >
+                      {{ r.problem }}
+                    </div>
+                  </td>
+                  <td class="py-2 pr-2">
+                    <span
+                      class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px]"
+                      :class="statusBadgeClass(r.status)"
+                    >
+                      {{ r.status }}
+                    </span>
+                  </td>
+                  <td class="py-2 pr-2">
+                    <span
+                      v-if="
+                        r.estimatedCost !== null &&
+                        r.estimatedCost !== undefined
+                      "
+                    >
+                      {{ Number(r.estimatedCost).toLocaleString("tr-TR") }} ₺
+                    </span>
+                    <span v-else>-</span>
+                  </td>
+                  <td class="py-2 pl-2 text-right">
+                    <button
+                      type="button"
+                      @click="startEditRepair(r)"
+                      class="inline-flex items-center px-2 py-1 text-[11px] rounded-md border border-slate-300 hover:bg-slate-50"
+                    >
+                      Düzenle
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <!-- Debug için istersen aç:
@@ -343,13 +397,17 @@
     <!-- GEÇMİŞ TAMİRLER MODAL -->
     <div
       v-if="showHistoryModal"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-2"
     >
-      <div class="bg-white rounded-xl shadow-xl w-full max-w-4xl max-h-[80vh] flex flex-col text-sm">
+      <div
+        class="bg-white rounded-xl shadow-xl w-full max-w-4xl max-h-[80vh] flex flex-col text-sm"
+      >
         <!-- Modal header -->
-        <div class="flex items-center justify-between px-4 py-3 border-b">
+        <div
+          class="flex flex-col sm:flex-row sm:items-center sm:justify-between px-4 py-3 border-b gap-2"
+        >
           <div>
-            <h3 class="text-base font-semibold">
+            <h3 class="text-sm sm:text-base font-semibold">
               Geçmiş Tamirler (Teslim Edilenler)
             </h3>
             <p class="text-[11px] text-slate-500">
@@ -361,13 +419,13 @@
             <input
               v-model="historySearchTerm"
               type="text"
-              class="border rounded-md px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="border rounded-md px-2 py-1 text-[11px] sm:text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 w-32 sm:w-48"
               placeholder="Ara..."
             />
             <button
               type="button"
               @click="showHistoryModal = false"
-              class="text-xs px-3 py-1.5 rounded-md border border-slate-300 text-slate-700 hover:bg-slate-50"
+              class="text-[11px] sm:text-xs px-3 py-1.5 rounded-md border border-slate-300 text-slate-700 hover:bg-slate-50"
             >
               Kapat
             </button>
@@ -375,23 +433,25 @@
         </div>
 
         <!-- Modal content -->
-        <div class="p-4 overflow-y-auto">
+        <div class="p-3 sm:p-4 overflow-y-auto">
           <div
             v-if="filteredArchivedRepairs.length === 0"
-            class="text-slate-500 text-sm"
+            class="text-slate-500 text-xs sm:text-sm"
           >
             Henüz geçmiş tamir kaydı yok.
           </div>
 
-          <div v-else>
-            <table class="w-full text-left text-xs border-collapse">
+          <div v-else class="overflow-x-auto">
+            <table
+              class="w-full min-w-[720px] text-left text-[11px] sm:text-xs border-collapse"
+            >
               <thead>
                 <tr class="border-b text-slate-500">
-                  <th class="py-2">Tarih</th>
-                  <th class="py-2">Müşteri</th>
-                  <th class="py-2">Cihaz</th>
-                  <th class="py-2">Durum</th>
-                  <th class="py-2">Tahmini Ücret</th>
+                  <th class="py-2 pr-2">Tarih</th>
+                  <th class="py-2 pr-2">Müşteri</th>
+                  <th class="py-2 pr-2">Cihaz</th>
+                  <th class="py-2 pr-2">Durum</th>
+                  <th class="py-2 pr-2">Tahmini Ücret</th>
                 </tr>
               </thead>
               <tbody>
@@ -436,18 +496,19 @@
                   <td class="py-2 pr-2">
                     <span
                       class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px]"
-                      :class="statusClass(r.status)"
+                      :class="statusBadgeClass(r.status)"
                     >
                       {{ r.status || "Teslim Edildi" }}
                     </span>
                   </td>
                   <td class="py-2 pr-2">
                     <span
-                      v-if="r.estimatedCost !== null && r.estimatedCost !== undefined"
+                      v-if="
+                        r.estimatedCost !== null &&
+                        r.estimatedCost !== undefined
+                      "
                     >
-                      {{
-                        Number(r.estimatedCost).toLocaleString("tr-TR")
-                      }} ₺
+                      {{ Number(r.estimatedCost).toLocaleString("tr-TR") }} ₺
                     </span>
                     <span v-else>-</span>
                   </td>
@@ -462,272 +523,244 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from "vue";
+import { ref, computed, onMounted } from "vue";
+import api from "../api/client";
 
-const REPAIRS_STORAGE_KEY = "simge-repairs";
-const REPAIRS_ARCHIVE_KEY = "simge-repairs-archive";
-const DEVICES_STORAGE_KEY = "simge-devices";
+// Backend'ten gelen tamirler
+const repairs = ref([]);
+// Backend'ten gelen cihazlar (select için)
+const devices = ref([]);
 
-const repairs = ref([]);          // aktif tamirler (Teslim Edildi hariç)
-const archivedRepairs = ref([]);  // geçmiş tamirler (Teslim Edildi)
-const devices = ref([]);          // cihazlar sadece okunuyor gibi başlıyoruz ama artık statü güncelliyoruz
-
+const selectableDevices = computed(() =>
+  devices.value.filter((d) => {
+    const status = d.status || "";
+    // Burada "Teslim" ile başlayanları hariç tutuyoruz (küçük/büyük harf fark etmesin)
+    return !status.toLowerCase().startsWith("teslim");
+  })
+);
+// Form
 const repairForm = ref({
   deviceId: null,
   problem: "",
-  estimatedCost: null,
   status: "Bekliyor",
+  estimatedCost: "",
+  notes: "",
 });
 
 const editingRepairId = ref(null);
+
+// UI state
 const searchTerm = ref("");
 const historySearchTerm = ref("");
+const currentStatusFilter = ref("all"); // all | bekleyen | tamir | tamamlandi
 const showHistoryModal = ref(false);
 
-// 'all' | 'bekleyen' | 'tamir' | 'tamamlandi'
-const currentStatusFilter = ref("all");
+const loading = ref(false);
+const saving = ref(false);
+const error = ref("");
 
-// 📥 LocalStorage'dan oku
-onMounted(() => {
-  try {
-    const storedDevices = localStorage.getItem(DEVICES_STORAGE_KEY);
-    if (storedDevices) {
-      const parsed = JSON.parse(storedDevices);
-      devices.value = Array.isArray(parsed) ? parsed : [];
-    } else {
-      devices.value = [];
-    }
-  } catch (e) {
-    console.error("Devices parse error in RepairsPage:", e);
-    devices.value = [];
-  }
-
-  try {
-    const storedArchive = localStorage.getItem(REPAIRS_ARCHIVE_KEY);
-    const storedRepairs = localStorage.getItem(REPAIRS_STORAGE_KEY);
-
-    if (storedArchive) {
-      // Yeni sistem: aktif + arşiv ayrı
-      const parsedActive = storedRepairs ? JSON.parse(storedRepairs) : [];
-      repairs.value = Array.isArray(parsedActive) ? parsedActive : [];
-
-      const parsedArchived = JSON.parse(storedArchive);
-      archivedRepairs.value = Array.isArray(parsedArchived)
-        ? parsedArchived
-        : [];
-    } else if (storedRepairs) {
-      // Eski sistem: hepsi tek listede
-      const parsed = JSON.parse(storedRepairs);
-      const all = Array.isArray(parsed) ? parsed : [];
-      repairs.value = all.filter((r) => r.status !== "Teslim Edildi");
-      archivedRepairs.value = all.filter((r) => r.status === "Teslim Edildi");
-    } else {
-      repairs.value = [];
-      archivedRepairs.value = [];
-    }
-  } catch (e) {
-    console.error("Repairs parse error:", e);
-    repairs.value = [];
-    archivedRepairs.value = [];
-  }
+// Seçili cihaz (formdaki deviceId'den)
+const selectedDevice = computed(() => {
+  if (!repairForm.value.deviceId) return null;
+  return devices.value.find((d) => d.id === repairForm.value.deviceId) || null;
 });
 
-// 💾 Aktif ve geçmiş tamirleri ayrı ayrı kaydet
-watch(
-  repairs,
-  (val) => {
-    localStorage.setItem(REPAIRS_STORAGE_KEY, JSON.stringify(val));
-  },
-  { deep: true }
-);
+// 📥 Cihazları yükle
+async function loadDevices() {
+  try {
+    const res = await api.get("/devices");
+    devices.value = Array.isArray(res.data) ? res.data : [];
+  } catch (e) {
+    console.error("Cihazlar alınırken hata:", e);
+    devices.value = [];
+  }
+}
 
-watch(
-  archivedRepairs,
-  (val) => {
-    localStorage.setItem(REPAIRS_ARCHIVE_KEY, JSON.stringify(val));
-  },
-  { deep: true }
-);
+// 📥 Tamirleri yükle
+async function loadRepairs() {
+  loading.value = true;
+  error.value = "";
+  try {
+    const res = await api.get("/repairs");
+    const raw = Array.isArray(res.data) ? res.data : [];
 
-// ❗ YENİ: Cihazlardaki statü değişikliklerini de kaydet
-watch(
-  devices,
-  (val) => {
-    localStorage.setItem(DEVICES_STORAGE_KEY, JSON.stringify(val));
-  },
-  { deep: true }
-);
+    // Backendten gelen veriyi template'te beklediğimiz forma çeviriyoruz
+    repairs.value = raw.map((r) => {
+      const device = r.device || null;
+      const deviceInfo = device
+        ? `${device.type || ""} ${device.brand || ""} ${
+            device.model || ""
+          }`.trim() || "-"
+        : "-";
 
-// Seçili cihaz
-const selectedDevice = computed(
-  () =>
-    devices.value.find((d) => d.id == repairForm.value.deviceId) || null
-);
+      return {
+        ...r,
+        deviceInfo,
+        customerName: r.customerName || device?.customerName || "",
+        customerPhone: r.phone || device?.phone || "",
+        estimatedCost:
+          r.price !== null && r.price !== undefined ? Number(r.price) : null,
+      };
+    });
+  } catch (e) {
+    console.error("Tamirler alınırken hata:", e);
+    error.value = "Tamirler alınırken bir hata oluştu.";
+    repairs.value = [];
+  } finally {
+    loading.value = false;
+  }
+}
 
-// 🔧 Yeni tamir ekle / mevcut tamiri güncelle
-function saveRepair() {
+// Sayfa açılınca cihaz + tamirleri yükle
+onMounted(async () => {
+  await Promise.all([loadDevices(), loadRepairs()]);
+});
+
+// 🧹 Formu sıfırla
+function resetRepairForm() {
+  repairForm.value = {
+    deviceId: null,
+    problem: "",
+    status: "Bekliyor",
+    estimatedCost: "",
+    notes: "",
+  };
+  editingRepairId.value = null;
+}
+
+// 💾 Tamir kaydet / güncelle
+async function saveRepair() {
+  if (!repairForm.value.problem) {
+    alert("Lütfen en azından arıza / sorun açıklamasını girin.");
+    return;
+  }
+
   if (!repairForm.value.deviceId) {
     alert("Lütfen bir cihaz seçin.");
     return;
   }
 
-  const device = devices.value.find(
-    (d) => d.id == repairForm.value.deviceId
-  );
+  saving.value = true;
+  error.value = "";
 
-  if (!device) {
-    alert("Seçilen cihaz bulunamadı.");
-    return;
-  }
+  try {
+    const selected = selectedDevice.value;
 
-  const deviceInfoText = `${device.type || ""} ${device.brand || ""} ${
-    device.model || ""
-  }`.trim();
-
-  const customerName = device.customerName || "";
-  const customerPhone = device.phone || "";
-
-  let estimated = repairForm.value.estimatedCost;
-  if (
-    estimated === "" ||
-    estimated === null ||
-    estimated === undefined
-  ) {
-    estimated = null;
-  } else {
-    estimated = Number(estimated);
-    if (Number.isNaN(estimated)) {
-      estimated = null;
+    let price = null;
+    if (
+      repairForm.value.estimatedCost !== "" &&
+      repairForm.value.estimatedCost !== null
+    ) {
+      const n = Number(repairForm.value.estimatedCost);
+      price = Number.isFinite(n) ? n : null;
     }
-  }
 
-  // ✅ Cihaz durumunu tamir durumuna çek
-  device.status = repairForm.value.status || "Serviste";
-  // (watch(devices) sayesinde bu değişiklik localStorage'a da yazılacak)
-
-  const isDelivered = repairForm.value.status === "Teslim Edildi";
-
-  if (editingRepairId.value) {
-    // 🔁 Mevcut kaydı güncelle
-    const index = repairs.value.findIndex(
-      (r) => r.id === editingRepairId.value
-    );
-    if (index !== -1) {
-      const updated = {
-        ...repairs.value[index],
-        customerName,
-        customerPhone,
-        deviceId: device.id,
-        deviceInfo: deviceInfoText,
-        problem: repairForm.value.problem,
-        estimatedCost: estimated,
-        status: repairForm.value.status,
-        updatedAt: new Date().toISOString(),
-      };
-
-      if (isDelivered) {
-        repairs.value.splice(index, 1);
-        archivedRepairs.value.push({
-          ...updated,
-          deliveredAt: new Date().toISOString(),
-        });
-      } else {
-        repairs.value[index] = updated;
-      }
-    }
-  } else {
-    // ➕ Yeni kayıt ekle
-    const base = {
-      id: Date.now(),
-      createdAt: new Date().toISOString(),
-      customerName,
-      customerPhone,
-      deviceId: device.id,
-      deviceInfo: deviceInfoText,
+    const payload = {
+      deviceId: repairForm.value.deviceId,
       problem: repairForm.value.problem,
-      estimatedCost: estimated,
-      status: repairForm.value.status,
+      status: repairForm.value.status || "Bekliyor",
+      price,
+      notes: repairForm.value.notes || "",
+      customerName: selected?.customerName || null,
+      phone: selected?.phone || null,
     };
 
-    if (isDelivered) {
-      archivedRepairs.value.push({
-        ...base,
-        deliveredAt: new Date().toISOString(),
-      });
-    } else {
-      repairs.value.push(base);
-    }
-  }
+    console.log("Gönderilen payload:", payload);
 
-  // Formu sıfırla
-  editingRepairId.value = null;
-  repairForm.value = {
-    deviceId: null,
-    problem: "",
-    estimatedCost: null,
-    status: "Bekliyor",
-  };
+    if (editingRepairId.value) {
+      await api.put(`/repairs/${editingRepairId.value}`, payload);
+    } else {
+      await api.post("/repairs", payload);
+    }
+
+    await loadRepairs();
+    resetRepairForm();
+  } catch (e) {
+    console.error("Tamir kaydedilirken hata (raw):", e);
+    console.error(
+      "Tamir kaydedilirken hata (response):",
+      e?.response?.status,
+      e?.response?.data
+    );
+
+    error.value =
+      e?.response?.data?.message ||
+      "Tamir kaydı kaydedilirken bir hata oluştu.";
+    alert(error.value);
+  } finally {
+    saving.value = false;
+  }
 }
+
 
 // ✏️ Düzenleme başlat
-function startEditRepair(repair) {
-  editingRepairId.value = repair.id;
+function startEditRepair(r) {
+  editingRepairId.value = r.id || null;
+
   repairForm.value = {
-    deviceId: repair.deviceId ?? null,
-    problem: repair.problem ?? "",
+    deviceId: r.deviceId || null,
+    problem: r.problem || "",
+    status: r.status || "Bekliyor",
     estimatedCost:
-      repair.estimatedCost === null || repair.estimatedCost === undefined
-        ? null
-        : repair.estimatedCost,
-    status: repair.status || "Bekliyor",
+      r.estimatedCost !== null && r.estimatedCost !== undefined
+        ? r.estimatedCost
+        : "",
+    notes: r.notes || "",
   };
 }
 
-// ❌ Düzenlemeyi iptal et
+// ❌ Düzenlemeyi iptal
 function cancelEditRepair() {
-  editingRepairId.value = null;
-  repairForm.value = {
-    deviceId: null,
-    problem: "",
-    estimatedCost: null,
-    status: "Bekliyor",
-  };
+  resetRepairForm();
+}
+
+// 🗑 Sil (template'te buton yok ama fonksiyon dursun, belki eklemek istersin)
+async function deleteRepair(id) {
+  if (!confirm("Bu tamir kaydını silmek istediğinize emin misiniz?")) return;
+
+  try {
+    await api.delete(`/repairs/${id}`);
+    repairs.value = repairs.value.filter((r) => r.id !== id);
+  } catch (e) {
+    console.error("Tamir silinirken hata:", e);
+    alert("Tamir kaydı silinirken bir hata oluştu.");
+  }
 }
 
 // 🔢 Dashboard metrikleri
-const totalActiveRepairs = computed(() => repairs.value.length);
+const activeRepairs = computed(() =>
+  repairs.value.filter((r) => r.status !== "Teslim Edildi")
+);
+const archivedRepairs = computed(() =>
+  repairs.value.filter((r) => r.status === "Teslim Edildi")
+);
+
+const totalActiveRepairs = computed(() => activeRepairs.value.length);
 
 const totalWaitingRepairs = computed(
-  () => repairs.value.filter((r) => r.status === "Bekliyor").length
+  () => activeRepairs.value.filter((r) => r.status === "Bekliyor").length
 );
 
 const totalInServiceRepairs = computed(
   () =>
-    repairs.value.filter(
-      (r) =>
-        r.status === "Serviste" ||
-        r.status === "Yedek Parça Bekleniyor"
+    activeRepairs.value.filter(
+      (r) => r.status === "Serviste" || r.status === "Yedek Parça Bekleniyor"
     ).length
 );
 
-const totalArchivedRepairs = computed(
-  () => archivedRepairs.value.length
-);
+const totalArchivedRepairs = computed(() => archivedRepairs.value.length);
 
-// 🔍 Filtrelenmiş aktif tamirler
+// 🔍 Güncel tamirler (liste) + durum filtresi + arama
 const filteredRepairs = computed(() => {
   const term = searchTerm.value.trim().toLowerCase();
 
-  let base = repairs.value;
+  let base = activeRepairs.value;
 
-  // Duruma göre filtre
   if (currentStatusFilter.value === "bekleyen") {
     base = base.filter((r) => r.status === "Bekliyor");
   } else if (currentStatusFilter.value === "tamir") {
     base = base.filter(
-      (r) =>
-        r.status === "Serviste" ||
-        r.status === "Yedek Parça Bekleniyor"
+      (r) => r.status === "Serviste" || r.status === "Yedek Parça Bekleniyor"
     );
   } else if (currentStatusFilter.value === "tamamlandi") {
     base = base.filter((r) => r.status === "Tamamlandı");
@@ -737,19 +770,20 @@ const filteredRepairs = computed(() => {
 
   return base.filter((r) => {
     const customer = r.customerName?.toLowerCase() || "";
+    const phone = r.customerPhone?.toLowerCase() || "";
     const device = r.deviceInfo?.toLowerCase() || "";
-    const status = r.status?.toLowerCase() || "";
     const problem = r.problem?.toLowerCase() || "";
+
     return (
       customer.includes(term) ||
+      phone.includes(term) ||
       device.includes(term) ||
-      status.includes(term) ||
       problem.includes(term)
     );
   });
 });
 
-// 🔍 Filtrelenmiş geçmiş tamirler
+// 🔍 Geçmiş tamirler (modal içi arama)
 const filteredArchivedRepairs = computed(() => {
   const term = historySearchTerm.value.trim().toLowerCase();
   const base = archivedRepairs.value;
@@ -758,29 +792,33 @@ const filteredArchivedRepairs = computed(() => {
 
   return base.filter((r) => {
     const customer = r.customerName?.toLowerCase() || "";
+    const phone = r.customerPhone?.toLowerCase() || "";
     const device = r.deviceInfo?.toLowerCase() || "";
-    const status = r.status?.toLowerCase() || "";
     const problem = r.problem?.toLowerCase() || "";
+
     return (
       customer.includes(term) ||
+      phone.includes(term) ||
       device.includes(term) ||
-      status.includes(term) ||
       problem.includes(term)
     );
   });
 });
 
-// Duruma göre badge rengi
-function statusClass(status) {
-  if (status === "Tamamlandı" || status === "Teslim Edildi") {
+// Duruma göre rozet rengi
+function statusBadgeClass(status) {
+  if (status === "Teslim Edildi") {
     return "bg-green-100 text-green-700 border border-green-300";
   }
-  if (status === "Yedek Parça Bekleniyor") {
+  if (status === "Tamamlandı") {
+    return "bg-blue-100 text-blue-700 border border-blue-300";
+  }
+  if (status === "Serviste" || status === "Yedek Parça Bekleniyor") {
     return "bg-yellow-100 text-yellow-700 border border-yellow-300";
   }
   if (status === "Bekliyor") {
     return "bg-orange-100 text-orange-700 border border-orange-300";
   }
-  return "bg-blue-100 text-blue-700 border border-blue-300";
+  return "bg-slate-100 text-slate-700 border border-slate-300";
 }
 </script>

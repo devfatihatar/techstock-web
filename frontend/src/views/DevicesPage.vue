@@ -1,18 +1,23 @@
 <template>
   <div class="pb-10">
-    <header class="mb-6 flex items-center justify-between">
+    <!-- ÜST BAR -->
+    <header
+      class="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between"
+    >
       <div>
-        <h1 class="text-2xl font-semibold text-slate-800">Cihazlar</h1>
-        <p class="text-sm text-slate-500">
+        <h1 class="text-xl md:text-2xl font-semibold text-slate-800">Cihazlar</h1>
+        <p class="text-xs md:text-sm text-slate-500">
           Müşteri cihazlarını, durumlarını ve bilgilerini yönetin.
         </p>
       </div>
 
       <!-- Sağ üst: filtreler + Geçmiş cihazlar butonu -->
-      <div class="flex items-center gap-3">
+      <div
+        class="flex flex-col items-stretch sm:flex-row sm:items-center gap-3"
+      >
         <!-- Durum filtreleri -->
         <div
-          class="inline-flex items-center bg-slate-100 rounded-full p-1 text-xs"
+          class="inline-flex flex-wrap items-center bg-slate-100 rounded-full p-1 text-[11px] sm:text-xs"
         >
           <button
             type="button"
@@ -52,21 +57,22 @@
           </button>
         </div>
 
-        <!-- Daha belirgin Geçmiş cihazlar butonu -->
+        <!-- Geçmiş cihazlar butonu -->
         <button
           type="button"
           @click="showHistoryModal = true"
-          class="text-xs px-3.5 py-2 rounded-md bg-slate-900 text-white hover:bg-slate-800 shadow-sm flex items-center gap-1"
+          class="text-xs px-3.5 py-2 rounded-md bg-slate-900 text-white hover:bg-slate-800 shadow-sm flex items-center justify-center gap-1"
         >
           <span>Geçmiş Cihazlar</span>
         </button>
       </div>
     </header>
-    <!-- 🔹 YAN YANA KÜÇÜK DASHBOARD -->
+
+    <!-- KÜÇÜK DASHBOARD KUTULARI -->
     <div class="w-full flex flex-wrap gap-4 mb-6">
       <!-- Aktif cihaz -->
       <div
-        class="flex items-center gap-3 bg-white border border-slate-200 rounded-lg shadow p-3 flex-1 min-w-[200px]"
+        class="flex items-center gap-3 bg-white border border-slate-200 rounded-lg shadow p-3 flex-1 min-w-[160px] sm:min-w-[200px]"
       >
         <div
           class="w-10 h-10 bg-slate-900 text-white rounded-full flex items-center justify-center text-lg"
@@ -74,14 +80,14 @@
           💼
         </div>
         <div>
-          <div class="text-xs text-slate-500">Aktif</div>
-          <div class="text-xl font-semibold">{{ totalActive }}</div>
+          <div class="text-[11px] text-slate-500">Aktif</div>
+          <div class="text-lg md:text-xl font-semibold">{{ totalActive }}</div>
         </div>
       </div>
 
       <!-- Bekleyen -->
       <div
-        class="flex items-center gap-3 bg-white border border-slate-200 rounded-lg shadow p-3 flex-1 min-w-[200px]"
+        class="flex items-center gap-3 bg-white border border-slate-200 rounded-lg shadow p-3 flex-1 min-w-[160px] sm:min-w-[200px]"
       >
         <div
           class="w-10 h-10 bg-orange-500 text-white rounded-full flex items-center justify-center text-lg"
@@ -89,14 +95,14 @@
           ⏳
         </div>
         <div>
-          <div class="text-xs text-slate-500">Bekleyen</div>
-          <div class="text-xl font-semibold">{{ totalBekleyen }}</div>
+          <div class="text-[11px] text-slate-500">Bekleyen</div>
+          <div class="text-lg md:text-xl font-semibold">{{ totalBekleyen }}</div>
         </div>
       </div>
 
       <!-- Tamir Bekleyen -->
       <div
-        class="flex items-center gap-3 bg-white border border-slate-200 rounded-lg shadow p-3 flex-1 min-w-[200px]"
+        class="flex items-center gap-3 bg-white border border-slate-200 rounded-lg shadow p-3 flex-1 min-w-[160px] sm:min-w-[200px]"
       >
         <div
           class="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center text-lg"
@@ -104,14 +110,14 @@
           🛠️
         </div>
         <div>
-          <div class="text-xs text-slate-500">Tamir</div>
-          <div class="text-xl font-semibold">{{ totalTamir }}</div>
+          <div class="text-[11px] text-slate-500">Tamir</div>
+          <div class="text-lg md:text-xl font-semibold">{{ totalTamir }}</div>
         </div>
       </div>
 
       <!-- Teslim Edilen -->
       <div
-        class="flex items-center gap-3 bg-white border border-slate-200 rounded-lg shadow p-3 flex-1 min-w-[200px]"
+        class="flex items-center gap-3 bg-white border border-slate-200 rounded-lg shadow p-3 flex-1 min-w-[160px] sm:min-w-[200px]"
       >
         <div
           class="w-10 h-10 bg-green-600 text-white rounded-full flex items-center justify-center text-lg"
@@ -119,24 +125,26 @@
           📦
         </div>
         <div>
-          <div class="text-xs text-slate-500">Teslim</div>
-          <div class="text-xl font-semibold">{{ totalArchived }}</div>
+          <div class="text-[11px] text-slate-500">Teslim</div>
+          <div class="text-lg md:text-xl font-semibold">{{ totalArchived }}</div>
         </div>
       </div>
     </div>
 
-    <!-- Ana layout: Sol form + Sağ liste -->
-    <section class="flex gap-6">
+    <!-- ANA LAYOUT: FORM + LİSTE -->
+    <section class="flex flex-col lg:flex-row gap-6">
       <!-- Sol: Cihaz ekleme / düzenleme formu -->
-      <div class="bg-white rounded-xl shadow p-6 w-full max-w-xl text-sm">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-base font-semibold">
+      <div class="bg-white rounded-xl shadow p-4 sm:p-6 w-full lg:max-w-xl text-sm">
+        <div
+          class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2"
+        >
+          <h2 class="text-sm sm:text-base font-semibold">
             {{ editingDeviceId ? "Cihaz Kaydı Düzenle" : "Yeni Cihaz Kaydı" }}
           </h2>
 
           <span
             v-if="editingDeviceId"
-            class="text-[11px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-300"
+            class="text-[11px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-300 self-start sm:self-auto"
           >
             Düzenleme modu
           </span>
@@ -166,7 +174,7 @@
           </div>
 
           <!-- Tür / Marka / Model -->
-          <div class="grid grid-cols-3 gap-3">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
               <label class="block text-sm font-medium mb-1"> Tür </label>
               <input
@@ -239,7 +247,7 @@
           </div>
 
           <!-- Butonlar -->
-          <div class="flex gap-2 mt-2">
+          <div class="flex flex-col sm:flex-row gap-2 mt-2">
             <button
               @click="saveDevice"
               class="flex-1 bg-slate-900 text-white font-medium py-2.5 rounded-md text-sm hover:bg-slate-800 active:scale-[0.99] transition"
@@ -260,113 +268,121 @@
       </div>
 
       <!-- Sağ: GÜNCEL cihaz listesi (Teslim Edildi HARİÇ) -->
-      <div class="flex-1 bg-white rounded-xl shadow p-4 text-sm">
-        <div class="flex items-center justify-between mb-3 gap-3">
-          <h2 class="text-base font-semibold text-slate-800">
+      <div class="flex-1 bg-white rounded-xl shadow p-3 sm:p-4 text-sm">
+        <div
+          class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 gap-2"
+        >
+          <h2 class="text-sm sm:text-base font-semibold text-slate-800">
             Güncel Cihazlar
           </h2>
 
           <input
             v-model="searchTerm"
             type="text"
-            class="border rounded-md px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="border rounded-md px-2 py-1 text-[11px] sm:text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-64"
             placeholder="Müşteri, telefon, cihaz veya seri no ara..."
           />
         </div>
 
-        <div v-if="filteredDevices.length === 0" class="text-slate-500">
+        <div
+          v-if="filteredDevices.length === 0"
+          class="text-slate-500 text-xs sm:text-sm"
+        >
           Henüz güncel cihaz kaydı yok veya aramaya uygun kayıt bulunamadı.
         </div>
 
         <div v-else class="max-h-[420px] overflow-y-auto">
-          <table class="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr class="border-b text-slate-500">
-                <th class="py-2">Müşteri</th>
-                <th class="py-2">Telefon</th>
-                <th class="py-2">Cihaz</th>
-                <th class="py-2">Seri No</th>
-                <th class="py-2">Durum</th>
-                <th class="py-2 text-right">İşlemler</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="d in filteredDevices"
-                :key="d.id"
-                class="border-b last:border-0 text-slate-700 align-top"
-              >
-                <td class="py-2 pr-2">
-                  <div class="font-semibold">
-                    {{ d.customerName || "-" }}
-                  </div>
-                </td>
+          <!-- Mobilde yatay kaydırılabilir tablo -->
+          <div class="overflow-x-auto">
+            <table
+              class="w-full min-w-[720px] text-left text-[11px] sm:text-xs border-collapse"
+            >
+              <thead>
+                <tr class="border-b text-slate-500">
+                  <th class="py-2">Müşteri</th>
+                  <th class="py-2">Telefon</th>
+                  <th class="py-2">Cihaz</th>
+                  <th class="py-2">Seri No</th>
+                  <th class="py-2">Durum</th>
+                  <th class="py-2 text-right">İşlemler</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="d in filteredDevices"
+                  :key="d.id"
+                  class="border-b last:border-0 text-slate-700 align-top"
+                >
+                  <td class="py-2 pr-2">
+                    <div class="font-semibold">
+                      {{ d.customerName || "-" }}
+                    </div>
+                  </td>
 
-                <td class="py-2 pr-2">
-                  <div class="text-[11px] text-slate-600">
-                    {{ d.phone || "-" }}
-                  </div>
-                </td>
+                  <td class="py-2 pr-2">
+                    <div class="text-[11px] text-slate-600">
+                      {{ d.phone || "-" }}
+                    </div>
+                  </td>
 
-                <td class="py-2 pr-2">
-                  <div class="font-semibold">
-                    {{ d.type }} {{ d.brand }} {{ d.model }}
-                  </div>
-                  <div
-                    v-if="d.description"
-                    class="text-[11px] text-slate-500 mt-1"
-                  >
-                    {{ d.description }}
-                  </div>
-                </td>
+                  <td class="py-2 pr-2">
+                    <div class="font-semibold">
+                      {{ d.type }} {{ d.brand }} {{ d.model }}
+                    </div>
+                    <div
+                      v-if="d.description"
+                      class="text-[11px] text-slate-500 mt-1"
+                    >
+                      {{ d.description }}
+                    </div>
+                  </td>
 
-                <td class="py-2 pr-2">
-                  <div class="text-[11px] text-slate-600">
-                    {{ d.serialNumber || "-" }}
-                  </div>
-                </td>
+                  <td class="py-2 pr-2">
+                    <div class="text-[11px] text-slate-600">
+                      {{ d.serialNumber || "-" }}
+                    </div>
+                  </td>
 
-                <td class="py-2 pr-2">
-                  <span
-                    class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px]"
-                    :class="statusClass(d.status)"
-                  >
-                    {{ d.status || "Serviste" }}
-                  </span>
-                </td>
+                  <td class="py-2 pr-2">
+                    <span
+                      class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px]"
+                      :class="statusClass(d.status)"
+                    >
+                      {{ d.status || "Serviste" }}
+                    </span>
+                  </td>
 
-                <td class="py-2 pl-2 text-right">
-                  <button
-                    type="button"
-                    @click="startEditDevice(d)"
-                    class="inline-flex items-center px-2 py-1 text-[11px] rounded-md border border-slate-300 hover:bg-slate-50"
-                  >
-                    Düzenle
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                  <td class="py-2 pl-2 text-right">
+                    <button
+                      type="button"
+                      @click="startEditDevice(d)"
+                      class="inline-flex items-center px-2 py-1 text-[11px] rounded-md border border-slate-300 hover:bg-slate-50"
+                    >
+                      Düzenle
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-
-        <!-- Debug için istersen aç:
-        <pre class="text-[10px] mt-4">{{ devices }}</pre>
-        -->
       </div>
     </section>
 
     <!-- GEÇMİŞ CİHAZLAR MODAL -->
     <div
       v-if="showHistoryModal"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-2"
     >
       <div
         class="bg-white rounded-xl shadow-xl w-full max-w-4xl max-h-[80vh] flex flex-col text-sm"
       >
         <!-- Modal header -->
-        <div class="flex items-center justify-between px-4 py-3 border-b">
+        <div
+          class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 px-4 py-3 border-b"
+        >
           <div>
-            <h3 class="text-base font-semibold">
+            <h3 class="text-sm sm:text-base font-semibold">
               Geçmiş Cihazlar (Teslim Edilenler)
             </h3>
             <p class="text-[11px] text-slate-500">
@@ -378,13 +394,13 @@
             <input
               v-model="historySearchTerm"
               type="text"
-              class="border rounded-md px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="border rounded-md px-2 py-1 text-[11px] sm:text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 w-32 sm:w-48"
               placeholder="Ara..."
             />
             <button
               type="button"
               @click="showHistoryModal = false"
-              class="text-xs px-3 py-1.5 rounded-md border border-slate-300 text-slate-700 hover:bg-slate-50"
+              class="text-[11px] sm:text-xs px-3 py-1.5 rounded-md border border-slate-300 text-slate-700 hover:bg-slate-50"
             >
               Kapat
             </button>
@@ -392,16 +408,18 @@
         </div>
 
         <!-- Modal content -->
-        <div class="p-4 overflow-y-auto">
+        <div class="p-3 sm:p-4 overflow-y-auto">
           <div
             v-if="filteredArchivedDevices.length === 0"
-            class="text-slate-500 text-sm"
+            class="text-slate-500 text-xs sm:text-sm"
           >
             Henüz geçmiş cihaz kaydı yok.
           </div>
 
-          <div v-else>
-            <table class="w-full text-left text-xs border-collapse">
+          <div v-else class="overflow-x-auto">
+            <table
+              class="w-full min-w-[720px] text-left text-[11px] sm:text-xs border-collapse"
+            >
               <thead>
                 <tr class="border-b text-slate-500">
                   <th class="py-2">Müşteri</th>
@@ -480,17 +498,13 @@
   </div>
 </template>
 
+
 <script setup>
-import { ref, computed, onMounted, watch } from "vue";
+import { ref, computed, onMounted } from "vue";
+import api from "../api/client";
 
-const DEVICES_STORAGE_KEY = "simge-devices";
-const DEVICES_ARCHIVE_KEY = "simge-devices-archive";
-
-const REPAIRS_STORAGE_KEY = "simge-repairs";
-const REPAIRS_ARCHIVE_KEY = "simge-repairs-archive";
-
-const devices = ref([]);           // Güncel cihazlar
-const archivedDevices = ref([]);   // Geçmiş cihazlar (Teslim Edildi olanlar)
+// Backend'ten gelen cihazlar (hepsi, aktif + teslim)
+const devices = ref([]);
 
 const deviceForm = ref({
   customerName: "",
@@ -507,96 +521,31 @@ const editingDeviceId = ref(null);
 const searchTerm = ref("");
 const historySearchTerm = ref("");
 const showHistoryModal = ref(false);
+const currentStatusFilter = ref("all"); // 'all' | 'bekleyen' | 'tamir'
 
-// 'all' | 'bekleyen' | 'tamir'
-const currentStatusFilter = ref("all");
+const loading = ref(false);
+const saving = ref(false);
+const error = ref("");
 
-// 📥 LocalStorage'dan oku
-onMounted(() => {
-  try {
-    const storedDevices = localStorage.getItem(DEVICES_STORAGE_KEY);
-    devices.value = storedDevices ? (JSON.parse(storedDevices) || []) : [];
-    if (!Array.isArray(devices.value)) devices.value = [];
-  } catch (e) {
-    console.error("Devices parse error:", e);
-    devices.value = [];
-  }
-
-  try {
-    const storedArchived = localStorage.getItem(DEVICES_ARCHIVE_KEY);
-    archivedDevices.value = storedArchived
-      ? (JSON.parse(storedArchived) || [])
-      : [];
-    if (!Array.isArray(archivedDevices.value)) archivedDevices.value = [];
-  } catch (e) {
-    console.error("Archived devices parse error:", e);
-    archivedDevices.value = [];
-  }
-
-  // 🔄 Teslim Edildi durumundaki cihazları aktif listeden geçmişe taşı (migration)
-  try {
-    const stillActive = [];
-    const movedToArchive = [...archivedDevices.value];
-
-    for (const d of devices.value) {
-      if (!d || typeof d !== "object") continue;
-
-      if (d.status === "Teslim Edildi") {
-        // Eğer zaten arşivde yoksa ekle
-        const existsInArchive = movedToArchive.some((a) => a.id === d.id);
-        if (!existsInArchive) {
-          movedToArchive.push({
-            ...d,
-            // deliveredAt yoksa oluştur
-            deliveredAt: d.deliveredAt || new Date().toISOString(),
-          });
-        }
-      } else {
-        stillActive.push(d);
-      }
-    }
-
-    devices.value = stillActive;
-    archivedDevices.value = movedToArchive;
-
-    // Persist et
-    localStorage.setItem(DEVICES_STORAGE_KEY, JSON.stringify(devices.value));
-    localStorage.setItem(
-      DEVICES_ARCHIVE_KEY,
-      JSON.stringify(archivedDevices.value)
-    );
-
-    // Bu cihazlara bağlı tamirleri de kontrol et
-    const deliveredIds = new Set(
-      movedToArchive
-        .filter((d) => d && d.id != null)
-        .map((d) => d.id)
-    );
-
-    deliveredIds.forEach((id) => {
-      syncRepairsForDeliveredDevice(id);
-    });
-  } catch (e) {
-    console.error("Device migration / repair sync error:", e);
-  }
+// 📥 Sayfa açılınca cihazları backend'ten çek
+onMounted(async () => {
+  await loadDevices();
 });
 
-// 💾 Değiştikçe kaydet
-watch(
-  devices,
-  (val) => {
-    localStorage.setItem(DEVICES_STORAGE_KEY, JSON.stringify(val));
-  },
-  { deep: true }
-);
-
-watch(
-  archivedDevices,
-  (val) => {
-    localStorage.setItem(DEVICES_ARCHIVE_KEY, JSON.stringify(val));
-  },
-  { deep: true }
-);
+async function loadDevices() {
+  loading.value = true;
+  error.value = "";
+  try {
+    const res = await api.get("/devices");
+    devices.value = Array.isArray(res.data) ? res.data : [];
+  } catch (e) {
+    console.error("Cihazlar alınırken hata:", e);
+    error.value = "Cihazlar alınırken bir hata oluştu.";
+    devices.value = [];
+  } finally {
+    loading.value = false;
+  }
+}
 
 // 🧹 Formu sıfırla
 function resetDeviceForm() {
@@ -612,70 +561,49 @@ function resetDeviceForm() {
   };
 }
 
-// 💾 Cihaz kaydet / güncelle + bağlı tamirleri güncelle
-function saveDevice() {
+// 💾 Cihaz kaydet / güncelle (backend'e)
+async function saveDevice() {
   if (!deviceForm.value.customerName || !deviceForm.value.type) {
     alert("En azından müşteri adı ve cihaz türü girilmelidir.");
     return;
   }
 
-  const willBeDelivered = deviceForm.value.status === "Teslim Edildi";
-  let deviceIdToUse = editingDeviceId.value || null;
-  const now = new Date().toISOString();
+  saving.value = true;
+  error.value = "";
 
-  if (editingDeviceId.value) {
-    // 🔁 Güncelle
-    const idx = devices.value.findIndex(
-      (d) => d.id === editingDeviceId.value
-    );
+  try {
+    const payload = { ...deviceForm.value };
 
-    if (idx !== -1) {
-      const updated = {
-        ...devices.value[idx],
-        ...deviceForm.value,
-      };
+    if (editingDeviceId.value) {
+      // Güncelleme
+      const res = await api.put(`/devices/${editingDeviceId.value}`, payload);
 
-      if (willBeDelivered) {
-        // Aktif listeden çıkar, geçmişe taşı
-        devices.value.splice(idx, 1);
-        archivedDevices.value.push({
-          ...updated,
-          deliveredAt: updated.deliveredAt || now,
-        });
+      // Local listede güncelle
+      const idx = devices.value.findIndex(
+        (d) => d.id === editingDeviceId.value
+      );
+      if (idx !== -1) {
+        devices.value[idx] = res.data;
       } else {
-        devices.value[idx] = updated;
+        // Emin olmak için tekrar tüm listeyi çekelim
+        await loadDevices();
       }
     } else {
-      // Çok uç bir durumda: aktif listede yoksa, arşivde olabilir, onu güncelleme senaryosunu şimdilik es geçiyoruz.
-      console.warn("Editing device not found in active list:", editingDeviceId.value);
+      // Yeni cihaz ekle
+      const res = await api.post("/devices", payload);
+      // En üste ekleyelim
+      devices.value.unshift(res.data);
     }
-  } else {
-    // ➕ Yeni cihaz
-    const newId = Date.now();
-    deviceIdToUse = newId;
-    const base = {
-      id: newId,
-      createdAt: now,
-      ...deviceForm.value,
-    };
 
-    if (willBeDelivered) {
-      archivedDevices.value.push({
-        ...base,
-        deliveredAt: base.deliveredAt || now,
-      });
-    } else {
-      devices.value.push(base);
-    }
+    editingDeviceId.value = null;
+    resetDeviceForm();
+  } catch (e) {
+    console.error("Cihaz kaydedilirken hata:", e);
+    error.value =
+      e?.response?.data?.message || "Cihaz kaydedilirken bir hata oluştu.";
+  } finally {
+    saving.value = false;
   }
-
-  // Eğer cihaz Teslim Edildi ise, ona bağlı tüm aktif tamirleri arşive taşı
-  if (willBeDelivered && deviceIdToUse != null) {
-    syncRepairsForDeliveredDevice(deviceIdToUse);
-  }
-
-  editingDeviceId.value = null;
-  resetDeviceForm();
 }
 
 // ✏️ Düzenleme başlat
@@ -700,32 +628,34 @@ function cancelEditDevice() {
 }
 
 // 🔢 Dashboard metrikleri
-const totalActive = computed(() => devices.value.length);
-
-const totalBekleyen = computed(() =>
-  devices.value.filter((d) => d.status === "Bekliyor").length
+const activeDevices = computed(() =>
+  devices.value.filter((d) => d.status !== "Teslim Edildi")
+);
+const archivedDevices = computed(() =>
+  devices.value.filter((d) => d.status === "Teslim Edildi")
 );
 
-const totalTamir = computed(() =>
-  devices.value.filter(
-    (d) =>
-      d.status === "Serviste" ||
-      d.status === "Yedek Parça Bekleniyor"
-  ).length
+const totalActive = computed(() => activeDevices.value.length);
+
+const totalBekleyen = computed(
+  () => activeDevices.value.filter((d) => d.status === "Bekliyor").length
+);
+
+const totalTamir = computed(
+  () =>
+    activeDevices.value.filter(
+      (d) =>
+        d.status === "Serviste" || d.status === "Yedek Parça Bekleniyor"
+    ).length
 );
 
 const totalArchived = computed(() => archivedDevices.value.length);
-
-const totalAllDevices = computed(() => {
-  const sum = totalActive.value + totalArchived.value;
-  return sum === 0 ? 1 : sum; // 0'a bölme olmasın diye
-});
 
 // 🔍 Güncel cihazlar + durum filtresi + arama
 const filteredDevices = computed(() => {
   const term = searchTerm.value.trim().toLowerCase();
 
-  let base = devices.value;
+  let base = activeDevices.value;
 
   if (currentStatusFilter.value === "bekleyen") {
     base = base.filter((d) => d.status === "Bekliyor");
@@ -781,57 +711,6 @@ const filteredArchivedDevices = computed(() => {
     );
   });
 });
-
-// 🧩 Cihaz Teslim Edildi → Tamirleri arşive taşı
-function syncRepairsForDeliveredDevice(deviceId) {
-  try {
-    const storedActive = localStorage.getItem(REPAIRS_STORAGE_KEY);
-    const storedArchived = localStorage.getItem(REPAIRS_ARCHIVE_KEY);
-
-    let active = [];
-    let archived = [];
-
-    if (storedActive) {
-      const parsed = JSON.parse(storedActive);
-      active = Array.isArray(parsed) ? parsed : [];
-    }
-
-    if (storedArchived) {
-      const parsed = JSON.parse(storedArchived);
-      archived = Array.isArray(parsed) ? parsed : [];
-    }
-
-    const now = new Date().toISOString();
-    const remaining = [];
-    const moved = [];
-
-    for (const r of active) {
-      if (!r || typeof r !== "object") continue;
-
-      if (r.deviceId === deviceId && r.status !== "Teslim Edildi") {
-        moved.push({
-          ...r,
-          status: "Teslim Edildi",
-          updatedAt: now,
-          deliveredAt: now,
-        });
-      } else {
-        remaining.push(r);
-      }
-    }
-
-    if (moved.length > 0) {
-      const newArchived = [...archived, ...moved];
-      localStorage.setItem(REPAIRS_STORAGE_KEY, JSON.stringify(remaining));
-      localStorage.setItem(
-        REPAIRS_ARCHIVE_KEY,
-        JSON.stringify(newArchived)
-      );
-    }
-  } catch (e) {
-    console.error("syncRepairsForDeliveredDevice error:", e);
-  }
-}
 
 // Duruma göre rozet rengi
 function statusClass(status) {
