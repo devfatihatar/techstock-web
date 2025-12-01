@@ -1,11 +1,11 @@
 <template>
-  <div class="pb-10">
+  <div class="min-h-screen bg-[#f5f5f0] px-4 sm:px-6 lg:px-8 py-6 pb-10">
     <!-- ÜST BAR -->
     <header
       class="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between"
     >
       <div>
-        <h1 class="text-xl md:text-2xl font-semibold text-slate-800">
+        <h1 class="text-xl md:text-2xl font-semibold text-slate-900">
           Tamirler
         </h1>
         <p class="text-xs md:text-sm text-slate-500">
@@ -19,7 +19,7 @@
       >
         <!-- Durum filtreleri -->
         <div
-          class="inline-flex flex-wrap items-center bg-slate-100 rounded-full p-1 text-[11px] sm:text-xs"
+          class="inline-flex flex-wrap items-center bg-slate-100 rounded-full p-1 text-[11px] sm:text-xs border border-slate-200 shadow-sm"
         >
           <button
             type="button"
@@ -83,10 +83,12 @@
     </header>
 
     <!-- Mini dashboard (yan yana kutular) -->
-    <div class="w-full flex flex-wrap gap-4 mb-6">
+    <div
+      class="w-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6"
+    >
       <!-- Aktif tamirler -->
       <div
-        class="flex items-center gap-3 bg-white border border-slate-200 rounded-lg shadow p-3 flex-1 min-w-[160px] sm:min-w-[200px]"
+        class="flex items-center gap-3 bg-white border border-slate-200 rounded-xl shadow-sm p-3"
       >
         <div
           class="w-10 h-10 bg-slate-900 text-white rounded-full flex items-center justify-center text-lg"
@@ -94,8 +96,10 @@
           🛠️
         </div>
         <div>
-          <div class="text-[11px] text-slate-500">Aktif tamirler</div>
-          <div class="text-lg md:text-xl font-semibold">
+          <div class="text-[11px] text-slate-500 uppercase tracking-wide">
+            Aktif tamirler
+          </div>
+          <div class="text-lg md:text-xl font-semibold text-slate-900">
             {{ totalActiveRepairs }}
           </div>
         </div>
@@ -103,7 +107,7 @@
 
       <!-- Bekleyen tamirler -->
       <div
-        class="flex items-center gap-3 bg-white border border-slate-200 rounded-lg shadow p-3 flex-1 min-w-[160px] sm:min-w-[200px]"
+        class="flex items-center gap-3 bg-white border border-slate-200 rounded-xl shadow-sm p-3"
       >
         <div
           class="w-10 h-10 bg-orange-500 text-white rounded-full flex items-center justify-center text-lg"
@@ -111,8 +115,10 @@
           ⏳
         </div>
         <div>
-          <div class="text-[11px] text-slate-500">Bekleyen</div>
-          <div class="text-lg md:text-xl font-semibold">
+          <div class="text-[11px] text-slate-500 uppercase tracking-wide">
+            Bekleyen
+          </div>
+          <div class="text-lg md:text-xl font-semibold text-slate-900">
             {{ totalWaitingRepairs }}
           </div>
         </div>
@@ -120,7 +126,7 @@
 
       <!-- Serviste / Parça bekleyen -->
       <div
-        class="flex items-center gap-3 bg-white border border-slate-200 rounded-lg shadow p-3 flex-1 min-w-[160px] sm:min-w-[200px]"
+        class="flex items-center gap-3 bg-white border border-slate-200 rounded-xl shadow-sm p-3"
       >
         <div
           class="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center text-lg"
@@ -128,8 +134,10 @@
           🔧
         </div>
         <div>
-          <div class="text-[11px] text-slate-500">Tamirde</div>
-          <div class="text-lg md:text-xl font-semibold">
+          <div class="text-[11px] text-slate-500 uppercase tracking-wide">
+            Tamirde
+          </div>
+          <div class="text-lg md:text-xl font-semibold text-slate-900">
             {{ totalInServiceRepairs }}
           </div>
         </div>
@@ -137,7 +145,7 @@
 
       <!-- Geçmiş tamirler -->
       <div
-        class="flex items-center gap-3 bg-white border border-slate-200 rounded-lg shadow p-3 flex-1 min-w-[160px] sm:min-w-[200px]"
+        class="flex items-center gap-3 bg-white border border-slate-200 rounded-xl shadow-sm p-3"
       >
         <div
           class="w-10 h-10 bg-green-600 text-white rounded-full flex items-center justify-center text-lg"
@@ -145,8 +153,10 @@
           📦
         </div>
         <div>
-          <div class="text-[11px] text-slate-500">Geçmiş tamirler</div>
-          <div class="text-lg md:text-xl font-semibold">
+          <div class="text-[11px] text-slate-500 uppercase tracking-wide">
+            Geçmiş tamirler
+          </div>
+          <div class="text-lg md:text-xl font-semibold text-slate-900">
             {{ totalArchivedRepairs }}
           </div>
         </div>
@@ -154,15 +164,16 @@
     </div>
 
     <!-- ANA LAYOUT: Sol form + Sağ liste -->
-    <section class="flex flex-col lg:flex-row gap-6">
+    <!-- xl'den önce dikey, xl ve üstü yan yana -->
+    <section class="flex flex-col xl:flex-row gap-6">
       <!-- Sol: Tamir ekleme / düzenleme formu -->
       <div
-        class="bg-white rounded-xl shadow p-4 sm:p-6 w-full lg:max-w-xl text-sm"
+        class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6 w-full xl:max-w-xl text-sm"
       >
         <div
           class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2"
         >
-          <h2 class="text-sm sm:text-base font-semibold">
+          <h2 class="text-sm sm:text-base font-semibold text-slate-900">
             {{ editingRepairId ? "Tamir Kaydı Düzenle" : "Yeni Tamir Kaydı" }}
           </h2>
 
@@ -177,17 +188,17 @@
         <div class="space-y-4">
           <!-- Cihaz seçimi -->
           <div>
-            <label class="block text-sm font-medium mb-1">
+            <label class="block text-sm font-medium mb-1 text-slate-700">
               Cihaz (kayıtlı cihazlardan seç)
             </label>
 
             <select
               v-model.number="repairForm.deviceId"
-              class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+              class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white"
             >
               <option :value="null" disabled>Cihaz seçin...</option>
 
-               <option v-for="d in selectableDevices" :key="d.id" :value="d.id">
+              <option v-for="d in selectableDevices" :key="d.id" :value="d.id">
                 {{ d.customerName || "Müşteri" }} - {{ d.type }} {{ d.brand }}
                 {{ d.model }}
               </option>
@@ -222,13 +233,13 @@
 
           <!-- Sorun açıklaması -->
           <div>
-            <label class="block text-sm font-medium mb-1">
+            <label class="block text-sm font-medium mb-1 text-slate-700">
               Sorun Açıklaması
             </label>
             <textarea
               v-model="repairForm.problem"
               rows="2"
-              class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white"
               placeholder="Örn: Açılmıyor, ekran kırık, şarj olmuyor..."
             ></textarea>
           </div>
@@ -236,23 +247,25 @@
           <!-- Ücret + Durum -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-sm font-medium mb-1">
+              <label class="block text-sm font-medium mb-1 text-slate-700">
                 Tahmini Ücret (₺)
               </label>
               <input
                 v-model="repairForm.estimatedCost"
                 type="number"
                 min="0"
-                class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white"
                 placeholder="İsteğe bağlı"
               />
             </div>
 
             <div>
-              <label class="block text-sm font-medium mb-1">Durum</label>
+              <label class="block text-sm font-medium mb-1 text-slate-700">
+                Durum
+              </label>
               <select
                 v-model="repairForm.status"
-                class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white"
               >
                 <option>Bekliyor</option>
                 <option>Serviste</option>
@@ -284,18 +297,20 @@
       </div>
 
       <!-- Sağ: Tamir listesi -->
-      <div class="flex-1 bg-white rounded-xl shadow p-3 sm:p-4 text-sm">
+      <div
+        class="flex-1 bg-white rounded-2xl shadow-sm border border-slate-200 p-3 sm:p-4 text-sm"
+      >
         <div
           class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 gap-2"
         >
-          <h2 class="text-sm sm:text-base font-semibold text-slate-800">
+          <h2 class="text-sm sm:text-base font-semibold text-slate-900">
             Tamir Kayıtları
           </h2>
 
           <input
             v-model="searchTerm"
             type="text"
-            class="border rounded-md px-2 py-1 text-[11px] sm:text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-64"
+            class="border rounded-md px-2 py-1 text-[11px] sm:text-xs focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 w-full sm:w-64 bg-white"
             placeholder="Müşteri, cihaz veya durum ara..."
           />
         </div>
@@ -311,29 +326,29 @@
           <!-- Mobilde yatay kaydırılabilir tablo -->
           <div class="overflow-x-auto">
             <table
-              class="w-full min-w-[720px] text-left text-[11px] sm:text-xs border-collapse"
+              class="w-full min-w-[640px] text-left text-[11px] sm:text-xs border-collapse"
             >
               <thead>
-                <tr class="border-b text-slate-500">
-                  <th class="py-2 pr-2">Tarih</th>
-                  <th class="py-2 pr-2">Müşteri</th>
-                  <th class="py-2 pr-2">Cihaz</th>
-                  <th class="py-2 pr-2">Durum</th>
-                  <th class="py-2 pr-2">Tahmini Ücret</th>
-                  <th class="py-2 pl-2 text-right">İşlemler</th>
+                <tr class="border-b text-slate-500 bg-slate-50">
+                  <th class="py-2 pr-2 font-medium">Tarih</th>
+                  <th class="py-2 pr-2 font-medium">Müşteri</th>
+                  <th class="py-2 pr-2 font-medium">Cihaz</th>
+                  <th class="py-2 pr-2 font-medium">Durum</th>
+                  <th class="py-2 pr-2 font-medium">Tahmini Ücret</th>
+                  <th class="py-2 pl-2 font-medium text-right">İşlemler</th>
                 </tr>
               </thead>
               <tbody>
                 <tr
                   v-for="(r, idx) in filteredRepairs"
                   :key="r?.id || idx"
-                  class="border-b last:border-0 text-slate-700 align-top"
+                  class="border-b last:border-0 text-slate-700 align-top hover:bg-slate-50/60"
                 >
                   <td class="py-2 pr-2">
                     {{ new Date(r.createdAt).toLocaleDateString("tr-TR") }}
                   </td>
                   <td class="py-2 pr-2">
-                    <div class="font-semibold">
+                    <div class="font-semibold text-slate-800">
                       {{ r.customerName || "-" }}
                     </div>
                     <div
@@ -344,7 +359,7 @@
                     </div>
                   </td>
                   <td class="py-2 pr-2">
-                    <div class="font-semibold">
+                    <div class="font-semibold text-slate-800">
                       {{ r.deviceInfo }}
                     </div>
                     <div
@@ -387,10 +402,6 @@
             </table>
           </div>
         </div>
-
-        <!-- Debug için istersen aç:
-        <pre class="text-[10px] mt-4">{{ repairs }}</pre>
-        -->
       </div>
     </section>
 
@@ -407,7 +418,7 @@
           class="flex flex-col sm:flex-row sm:items-center sm:justify-between px-4 py-3 border-b gap-2"
         >
           <div>
-            <h3 class="text-sm sm:text-base font-semibold">
+            <h3 class="text-sm sm:text-base font-semibold text-slate-900">
               Geçmiş Tamirler (Teslim Edilenler)
             </h3>
             <p class="text-[11px] text-slate-500">
@@ -419,7 +430,7 @@
             <input
               v-model="historySearchTerm"
               type="text"
-              class="border rounded-md px-2 py-1 text-[11px] sm:text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 w-32 sm:w-48"
+              class="border rounded-md px-2 py-1 text-[11px] sm:text-xs focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 w-32 sm:w-48 bg-white"
               placeholder="Ara..."
             />
             <button
@@ -443,22 +454,22 @@
 
           <div v-else class="overflow-x-auto">
             <table
-              class="w-full min-w-[720px] text-left text-[11px] sm:text-xs border-collapse"
+              class="w-full min-w-[640px] text-left text-[11px] sm:text-xs border-collapse"
             >
               <thead>
-                <tr class="border-b text-slate-500">
-                  <th class="py-2 pr-2">Tarih</th>
-                  <th class="py-2 pr-2">Müşteri</th>
-                  <th class="py-2 pr-2">Cihaz</th>
-                  <th class="py-2 pr-2">Durum</th>
-                  <th class="py-2 pr-2">Tahmini Ücret</th>
+                <tr class="border-b text-slate-500 bg-slate-50">
+                  <th class="py-2 pr-2 font-medium">Tarih</th>
+                  <th class="py-2 pr-2 font-medium">Müşteri</th>
+                  <th class="py-2 pr-2 font-medium">Cihaz</th>
+                  <th class="py-2 pr-2 font-medium">Durum</th>
+                  <th class="py-2 pr-2 font-medium">Tahmini Ücret</th>
                 </tr>
               </thead>
               <tbody>
                 <tr
                   v-for="r in filteredArchivedRepairs"
                   :key="r.id"
-                  class="border-b last:border-0 text-slate-700 align-top"
+                  class="border-b last:border-0 text-slate-700 align-top hover:bg-slate-50/60"
                 >
                   <td class="py-2 pr-2">
                     {{
@@ -472,7 +483,7 @@
                     }}
                   </td>
                   <td class="py-2 pr-2">
-                    <div class="font-semibold">
+                    <div class="font-semibold text-slate-800">
                       {{ r.customerName || "-" }}
                     </div>
                     <div
@@ -483,7 +494,7 @@
                     </div>
                   </td>
                   <td class="py-2 pr-2">
-                    <div class="font-semibold">
+                    <div class="font-semibold text-slate-800">
                       {{ r.deviceInfo }}
                     </div>
                     <div
@@ -534,10 +545,11 @@ const devices = ref([]);
 const selectableDevices = computed(() =>
   devices.value.filter((d) => {
     const status = d.status || "";
-    // Burada "Teslim" ile başlayanları hariç tutuyoruz (küçük/büyük harf fark etmesin)
+    // "Teslim" ile başlayanları hariç tut (küçük/büyük harf fark etmez)
     return !status.toLowerCase().startsWith("teslim");
   })
 );
+
 // Form
 const repairForm = ref({
   deviceId: null,
@@ -584,13 +596,12 @@ async function loadRepairs() {
     const res = await api.get("/repairs");
     const raw = Array.isArray(res.data) ? res.data : [];
 
-    // Backendten gelen veriyi template'te beklediğimiz forma çeviriyoruz
+    // Backend'ten gelen veriyi template'te beklediğimiz forma çeviriyoruz
     repairs.value = raw.map((r) => {
       const device = r.device || null;
       const deviceInfo = device
-        ? `${device.type || ""} ${device.brand || ""} ${
-            device.model || ""
-          }`.trim() || "-"
+        ? `${device.type || ""} ${device.brand || ""} ${device.model || ""}`
+            .trim() || "-"
         : "-";
 
       return {
@@ -692,7 +703,6 @@ async function saveRepair() {
   }
 }
 
-
 // ✏️ Düzenleme başlat
 function startEditRepair(r) {
   editingRepairId.value = r.id || null;
@@ -714,7 +724,7 @@ function cancelEditRepair() {
   resetRepairForm();
 }
 
-// 🗑 Sil (template'te buton yok ama fonksiyon dursun, belki eklemek istersin)
+// 🗑 Sil (şimdilik template'te buton yok ama fonksiyon dursun)
 async function deleteRepair(id) {
   if (!confirm("Bu tamir kaydını silmek istediğinize emin misiniz?")) return;
 

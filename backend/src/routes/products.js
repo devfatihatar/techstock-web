@@ -38,47 +38,64 @@ router.post("/", auth, async (req, res) => {
     const price =
       buyPrice !== undefined && buyPrice !== null ? Number(buyPrice) : null;
 
-    const product = await prisma.product.create({
-      data: {
-        companyId: req.company.id,
-        name,
-        quantity: qty,
-        buyPrice: price,
-        supplier: supplier || null,
-      },
-    });
-
-    // İlk fiyat geçmişi
-    if (price !== null) {
-      await prisma.productPriceHistory.create({
+    // Transaction: ürün oluştur + ilk stok hareketi + fiyat geçmişi
+    const result = await prisma.$transaction(async (tx) => {
+      const product = await tx.product.create({
         data: {
-          productId: product.id,
-          price,
+          companyId: req.company.id,
+          name,
+          quantity: qty,
+          buyPrice: price,
+          supplier: supplier || null,
         },
       });
-    }
 
-    const withRelations = await prisma.product.findUnique({
-      where: { id: product.id },
-      include: {
-        priceHistory: {
-          orderBy: { date: "desc" },
+      // 🔹 Başlangıç stoğu varsa stoğa giriş hareketi kaydet
+      if (qty > 0) {
+        await tx.stockMovement.create({
+          data: {
+            companyId: req.company.id,
+            productId: product.id,
+            type: "IN",
+            quantity: qty,
+          },
+        });
+      }
+
+      // İlk fiyat geçmişi
+      if (price !== null) {
+        await tx.productPriceHistory.create({
+          data: {
+            productId: product.id,
+            price,
+          },
+        });
+      }
+
+      const withRelations = await tx.product.findUnique({
+        where: { id: product.id },
+        include: {
+          priceHistory: {
+            orderBy: { date: "desc" },
+          },
         },
-      },
+      });
+
+      return withRelations;
     });
 
-    res.status(201).json(withRelations);
+    res.status(201).json(result);
   } catch (err) {
     console.error("Ürün eklenirken sunucu hatası:", err);
     res.status(500).json({ message: "Ürün eklenirken hata oluştu" });
   }
 });
 
-// 🔹 STOK ARTTIR / AZALT (delta: +1 veya -1)
+// 🔹 STOK ARTTIR / AZALT (delta: +n veya -n) + StockMovement
 router.patch("/:id/stock", auth, async (req, res) => {
   try {
     const id = Number(req.params.id);
-    const { delta } = req.body;
+    const { delta, isCorrection } = req.body; // 👈 yeni field
 
     const product = await prisma.product.findFirst({
       where: { id, companyId: req.company.id },
@@ -89,12 +106,38 @@ router.patch("/:id/stock", auth, async (req, res) => {
     }
 
     const d = Number(delta) || 0;
-    let newQty = (product.quantity || 0) + d;
-    if (newQty < 0) newQty = 0;
+    if (d === 0) {
+      return res.json(product); // değişiklik yoksa dokunma
+    }
 
-    const updated = await prisma.product.update({
-      where: { id },
-      data: { quantity: newQty },
+    const updated = await prisma.$transaction(async (tx) => {
+      let newQty = (product.quantity || 0) + d;
+      if (newQty < 0) newQty = 0;
+
+      const updatedProduct = await tx.product.update({
+        where: { id },
+        data: { quantity: newQty },
+      });
+
+      // 🔹 Stok hareketi kaydı
+      let reason = null;
+      if (isCorrection) {
+        reason = "CORRECTION";
+      } else {
+        reason = d > 0 ? "MANUAL_IN" : "MANUAL_OUT";
+      }
+
+      await tx.stockMovement.create({
+        data: {
+          companyId: req.company.id,
+          productId: product.id,
+          type: d > 0 ? "IN" : "OUT",
+          quantity: Math.abs(d),
+          reason,
+        },
+      });
+
+      return updatedProduct;
     });
 
     res.json(updated);
@@ -103,6 +146,7 @@ router.patch("/:id/stock", auth, async (req, res) => {
     res.status(500).json({ message: "Stok güncellenirken hata oluştu" });
   }
 });
+
 
 // 🔹 FİYAT GÜNCELLE + FİYAT GEÇMİŞİNE EKLE
 router.put("/:id/price", auth, async (req, res) => {
@@ -167,6 +211,9 @@ router.delete("/:id", auth, async (req, res) => {
     await prisma.productPriceHistory.deleteMany({
       where: { productId: id },
     });
+
+    // İstersen burada stockMovement temizleyebilirsin (opsiyonel)
+    // await prisma.stockMovement.deleteMany({ where: { productId: id } });
 
     await prisma.product.delete({ where: { id } });
 

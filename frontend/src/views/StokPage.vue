@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="min-h-screen bg-[#f5f5f0] px-4 sm:px-6 lg:px-8 py-6 pb-24">
     <!-- Üst başlık -->
     <header
       class="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between"
@@ -66,19 +66,16 @@
           Ürünleri gör
         </button>
 
-        <p
-          v-else
-          class="mt-3 text-[11px] text-slate-500"
-        >
+        <p v-else class="mt-3 text-[11px] text-slate-500">
           Şu anda düşük stokta ürün yok.
         </p>
       </div>
     </section>
 
     <!-- İçerik alanı -->
-    <section class="flex flex-col lg:flex-row gap-6">
+    <section class="flex flex-col xl:flex-row gap-6">
       <!-- Sol: Ürün ekleme formu -->
-      <div class="w-full lg:max-w-xs">
+      <div class="w-full xl:max-w-xs">
         <ProductForm @add-product="handleAddProduct" />
       </div>
 
@@ -121,7 +118,7 @@
             <!-- Mobilde yatay kaydırılabilir tablo -->
             <div class="overflow-x-auto">
               <table
-                class="w-full min-w-[720px] text-left text-[11px] sm:text-xs border-collapse"
+                class="w-full min-w-[640px] text-left text-[11px] sm:text-xs border-collapse"
               >
                 <thead>
                   <tr class="border-b text-slate-500">
@@ -162,11 +159,9 @@
                       <!-- Düzenleme modunda değilse -->
                       <div v-if="priceEditId !== item.id">
                         <div class="flex flex-col gap-1">
-                          <div class="flex items-center gap-2">
+                          <div class="flex flex-wrap items-center gap-2">
                             <span>
-                              {{
-                                item.buyPrice?.toLocaleString("tr-TR")
-                              }}
+                              {{ item.buyPrice?.toLocaleString("tr-TR") }}
                               ₺
                             </span>
                             <button
@@ -200,15 +195,12 @@
                               :key="idx"
                             >
                               <span class="font-medium">
-                                {{
-                                  h.price?.toLocaleString("tr-TR")
-                                }}
-                                ₺
+                                {{ h.price?.toLocaleString('tr-TR') }} ₺
                               </span>
                               <span class="ml-1">
-                                ({{
-                                  new Date(h.date).toLocaleDateString("tr-TR")
-                                }})
+                                {{
+                                  new Date(h.date).toLocaleDateString('tr-TR')
+                                }}
                               </span>
                             </li>
                           </ul>
@@ -245,27 +237,66 @@
                       {{ item.supplier || "-" }}
                     </td>
 
-                    <td class="py-2 pl-2 text-right whitespace-nowrap">
-                      <button
-                        @click="increaseStock(item.id)"
-                        class="mr-1 px-2 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-[10px] sm:text-xs"
+                    <!-- İŞLEMLER: responsive olarak düzenlendi -->
+                    <td class="py-2 pl-2 text-right align-top">
+                      <div
+                        class="flex flex-col items-end gap-1 sm:gap-1.5"
                       >
-                        +1
-                      </button>
+                        <!-- Tekli + / - / Sil -->
+                        <div
+                          class="flex flex-wrap justify-end gap-1 sm:gap-1.5"
+                        >
+                          <button
+                            @click="increaseStock(item.id)"
+                            class="px-2 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-[10px] sm:text-xs"
+                          >
+                            +1
+                          </button>
 
-                      <button
-                        @click="decreaseStock(item.id)"
-                        class="mr-1 px-2 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600 text-[10px] sm:text-xs"
-                      >
-                        -1
-                      </button>
+                          <button
+                            @click="decreaseStock(item.id)"
+                            class="px-2 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600 text-[10px] sm:text-xs"
+                          >
+                            -1
+                          </button>
 
-                      <button
-                        @click="deleteProduct(item.id)"
-                        class="px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-[10px] sm:text-xs"
-                      >
-                        Sil
-                      </button>
+                          <button
+                            @click="deleteProduct(item.id)"
+                            class="px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-[10px] sm:text-xs"
+                          >
+                            Sil
+                          </button>
+                        </div>
+
+                        <!-- Toplu ekleme / düzeltme -->
+                        <div
+                          class="flex flex-wrap justify-end gap-1 sm:gap-1.5"
+                        >
+                          <input
+                            type="number"
+                            min="1"
+                            v-model.number="bulkQty[item.id]"
+                            class="w-14 sm:w-16 border rounded-md px-1 py-0.5 text-[10px] sm:text-xs text-right"
+                            placeholder="Adet"
+                          />
+
+                          <button
+                            @click="bulkIncreaseStock(item.id)"
+                            class="px-2 py-1 bg-slate-800 text-white rounded hover:bg-slate-900 text-[10px] sm:text-xs"
+                            title="Stoğa toplu ekle"
+                          >
+                            + Toplu
+                          </button>
+
+                          <button
+                            @click="bulkCorrectionDecrease(item.id)"
+                            class="px-2 py-1 bg-amber-600 text-white rounded hover:bg-amber-700 text-[10px] sm:text-xs"
+                            title="Hatalı giriş düzeltmesi, grafiğe yansımaz"
+                          >
+                            - Düzelt
+                          </button>
+                        </div>
+                      </div>
                     </td>
                   </tr>
                 </tbody>
@@ -309,10 +340,7 @@
           Şu anda düşük stokta ürün yok.
         </div>
 
-        <ul
-          v-else
-          class="divide-y max-h-64 overflow-y-auto"
-        >
+        <ul v-else class="divide-y max-h-64 overflow-y-auto">
           <li
             v-for="item in lowStockProducts"
             :key="item.id"
@@ -331,10 +359,7 @@
                 {{ item.quantity }} adet
               </p>
               <p class="text-[11px] text-slate-500">
-                {{
-                  item.buyPrice?.toLocaleString("tr-TR")
-                }}
-                ₺
+                {{ item.buyPrice?.toLocaleString("tr-TR") }} ₺
               </p>
             </div>
           </li>
@@ -344,35 +369,56 @@
   </div>
 </template>
 
-
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import ProductForm from "../components/ProductForm.vue";
-import api from "../api/client"; // 👈 repairs sayfasındaki axios client
+import api from "../api/client";
 
-const LOW_STOCK_THRESHOLD = 3;
-const SETTINGS_STORAGE_KEY = "simge-settings";
+const LOW_STOCK_THRESHOLD = 1;
 
-// 🔹 Ayarlar (şimdilik localStorage'dan)
+// 🔹 Ayarlar
 const settings = ref({
-  companyName: "Simge Bilgisayar",
-  userName: "Fatih",
+  companyName: "Firma",
+  userName: "Kullanıcı",
 });
 
-const storedSettings = localStorage.getItem(SETTINGS_STORAGE_KEY);
-if (storedSettings) {
+function loadSettingsFromLocal() {
   try {
-    const parsed = JSON.parse(storedSettings);
-    settings.value = {
-      ...settings.value,
-      ...parsed,
-    };
+    const companyRaw = localStorage.getItem("ts_company");
+    const userRaw = localStorage.getItem("ts_user");
+
+    if (companyRaw) {
+      const company = JSON.parse(companyRaw);
+      // Buradaki field isimlerini kendi backend’ine göre uyarlayabilirsin
+      settings.value.companyName =
+        company.name ||
+        company.companyName ||
+        settings.value.companyName;
+    }
+
+    if (userRaw) {
+      const user = JSON.parse(userRaw);
+      settings.value.userName =
+        user.fullName ||
+        user.name ||
+        user.username ||
+        user.email ||
+        settings.value.userName;
+    }
   } catch (e) {
-    console.error("Settings parse error:", e);
+    console.error("localStorage settings parse error:", e);
   }
 }
 
-// 🔹 Ürün listesi (artık backend'den geliyor)
+// component mount olduğunda oku
+onMounted(async () => {
+  loadSettingsFromLocal();
+  // SalesPage’de burada zaten loadProducts(), loadSales() çağırıyorsun,
+  // StockPage’de loadProducts() çağırıyorsun, onlar kalsın.
+});
+
+
+// 🔹 Ürün listesi
 const products = ref([]);
 
 // UI state
@@ -390,19 +436,21 @@ const showLowStockPanel = ref(false);
 // arama
 const searchTerm = ref("");
 
-// 📥 ÜRÜNLERİ BACKEND'DEN YÜKLE
+// toplu adet inputları için
+const bulkQty = ref({}); // { [productId]: number }
+
+// 📥 ÜRÜNLERİ YÜKLE
 async function loadProducts() {
   loading.value = true;
   error.value = "";
   try {
-    const res = await api.get("/products"); // -> http://localhost:4000/api/products
+    const res = await api.get("/products");
     const raw = Array.isArray(res.data) ? res.data : [];
 
     products.value = raw.map((p) => ({
       ...p,
       quantity: p.quantity != null ? p.quantity : 0,
       buyPrice: p.buyPrice != null ? Number(p.buyPrice) : null,
-      // priceHistory backend'den include edilecek (aşağıda backend'de göstereceğim)
       priceHistory: Array.isArray(p.priceHistory) ? p.priceHistory : [],
     }));
   } catch (e) {
@@ -418,7 +466,7 @@ onMounted(async () => {
   await loadProducts();
 });
 
-// 🔹 ÜRÜN EKLE – ProductForm'dan gelen event'i backend'e POST et
+// 🔹 ÜRÜN EKLE
 async function handleAddProduct(product) {
   try {
     const payload = {
@@ -434,8 +482,7 @@ async function handleAddProduct(product) {
       supplier: product.supplier || null,
     };
 
-    await api.post("/products", payload); // POST /api/products
-
+    await api.post("/products", payload);
     await loadProducts();
   } catch (e) {
     console.error("Ürün eklenirken hata:", e);
@@ -445,10 +492,13 @@ async function handleAddProduct(product) {
   }
 }
 
-// 🔹 STOK ARTTIR
+// 🔹 STOK ARTTIR (tekli, grafiğe yansısın)
 async function increaseStock(id) {
   try {
-    await api.patch(`/products/${id}/stock`, { delta: 1 }); // PATCH /api/products/:id/stock
+    await api.patch(`/products/${id}/stock`, {
+      delta: 1,
+      isCorrection: false,
+    });
     await loadProducts();
   } catch (e) {
     console.error("Stok arttırılırken hata:", e);
@@ -458,15 +508,74 @@ async function increaseStock(id) {
   }
 }
 
-// 🔹 STOK AZALT
+// 🔹 STOK AZALT (tekli, gerçek çıkış gibi – grafiğe yansısın)
 async function decreaseStock(id) {
   try {
-    await api.patch(`/products/${id}/stock`, { delta: -1 });
+    await api.patch(`/products/${id}/stock`, {
+      delta: -1,
+      isCorrection: false,
+    });
     await loadProducts();
   } catch (e) {
     console.error("Stok azaltılırken hata:", e);
     const msg =
       e?.response?.data?.message || "Stok azaltılırken bir hata oluştu.";
+    alert(msg);
+  }
+}
+
+// 🔹 TOPLU STOK ARTTIR
+async function bulkIncreaseStock(id) {
+  const qty = Number(bulkQty.value[id]) || 0;
+  if (qty <= 0) {
+    alert("Lütfen geçerli bir adet girin.");
+    return;
+  }
+
+  try {
+    await api.patch(`/products/${id}/stock`, {
+      delta: qty,
+      isCorrection: false,
+    });
+    bulkQty.value[id] = null;
+    await loadProducts();
+  } catch (e) {
+    console.error("Toplu stok arttırılırken hata:", e);
+    const msg =
+      e?.response?.data?.message ||
+      "Toplu stok arttırılırken bir hata oluştu.";
+    alert(msg);
+  }
+}
+
+// 🔹 TOPLU DÜZELTME (grafiğe yansımasın)
+async function bulkCorrectionDecrease(id) {
+  const qty = Number(bulkQty.value[id]) || 0;
+  if (qty <= 0) {
+    alert("Lütfen geçerli bir adet girin.");
+    return;
+  }
+
+  if (
+    !confirm(
+      `${qty} adet stok azaltılacak. Bu işlem "düzeltme" olarak işaretlenecek ve stoktan çıkan ürünler grafiğine yansımayacak. Onaylıyor musunuz?`
+    )
+  ) {
+    return;
+  }
+
+  try {
+    await api.patch(`/products/${id}/stock`, {
+      delta: -qty,
+      isCorrection: true,
+    });
+    bulkQty.value[id] = null;
+    await loadProducts();
+  } catch (e) {
+    console.error("Düzeltme amaçlı stok azaltılırken hata:", e);
+    const msg =
+      e?.response?.data?.message ||
+      "Düzeltme amaçlı stok azaltılırken bir hata oluştu.";
     alert(msg);
   }
 }
@@ -486,7 +595,7 @@ async function deleteProduct(id) {
   }
 }
 
-// 🔹 FİYAT DÜZENLEME BAŞLAT
+// 🔹 FİYAT DÜZENLEME
 function startPriceEdit(item) {
   priceEditId.value = item.id;
   priceEditValue.value =
@@ -500,7 +609,6 @@ function cancelPriceEdit() {
   priceEditValue.value = null;
 }
 
-// 🔹 FİYAT KAYDET (buyPrice + priceHistory backend'de tutulacak)
 async function savePriceEdit(id) {
   const newPrice = Number(priceEditValue.value);
   if (!Number.isFinite(newPrice) || newPrice < 0) {
@@ -569,4 +677,3 @@ const lowStockProducts = computed(() =>
   )
 );
 </script>
-

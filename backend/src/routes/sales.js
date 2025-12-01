@@ -22,7 +22,7 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-// 🔹 YENİ SATIŞ EKLE (stok düşürerek)
+// 🔹 YENİ SATIŞ EKLE (stok düşür + totalAmount + StockMovement)
 router.post("/", auth, async (req, res) => {
   try {
     const { productId, quantity, price, customer } = req.body;
@@ -35,6 +35,7 @@ router.post("/", auth, async (req, res) => {
 
     const qty = quantity ? Number(quantity) : 1;
     const unitPrice = Number(price);
+    const totalAmount = qty * unitPrice;
 
     // Ürün gerçekten bu firmaya mı ait, stok yeterli mi?
     const product = await prisma.product.findFirst({
@@ -53,13 +54,15 @@ router.post("/", auth, async (req, res) => {
       });
     }
 
-    // Transaction: stok düş + satış kaydet
+    // Transaction: stok düş + satış kaydet + stok hareketi kaydet
     const result = await prisma.$transaction(async (tx) => {
       const updatedProduct = await tx.product.update({
         where: { id: product.id },
         data: {
           quantity:
-            product.quantity != null ? product.quantity - qty : product.quantity,
+            product.quantity != null
+              ? product.quantity - qty
+              : product.quantity,
         },
       });
 
@@ -68,12 +71,24 @@ router.post("/", auth, async (req, res) => {
           companyId: req.company.id,
           productId: product.id,
           quantity: qty,
-          price: unitPrice,
+          price: unitPrice, // birim fiyat
+          totalAmount, // 🔹 toplam tutar
           customer: customer || null,
           date: new Date(),
         },
         include: {
           product: true,
+        },
+      });
+
+      // 🔹 Stok hareketi: OUT (stoktan çıkan)
+      await tx.stockMovement.create({
+        data: {
+          companyId: req.company.id,
+          productId: product.id,
+          type: "OUT",
+          quantity: qty,
+          reason: "SALE",
         },
       });
 

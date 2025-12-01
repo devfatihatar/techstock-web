@@ -1,11 +1,13 @@
 <template>
-  <div class="pb-10">
+  <div class="min-h-screen bg-[#f5f5f0] px-4 sm:px-6 lg:px-8 py-6 pb-10">
     <!-- ÜST BAR -->
     <header
       class="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between"
     >
       <div>
-        <h1 class="text-xl md:text-2xl font-semibold text-slate-800">Cihazlar</h1>
+        <h1 class="text-xl md:text-2xl font-semibold text-slate-900">
+          Cihazlar
+        </h1>
         <p class="text-xs md:text-sm text-slate-500">
           Müşteri cihazlarını, durumlarını ve bilgilerini yönetin.
         </p>
@@ -17,17 +19,15 @@
       >
         <!-- Durum filtreleri -->
         <div
-          class="inline-flex flex-wrap items-center bg-slate-100 rounded-full p-1 text-[11px] sm:text-xs"
+          class="inline-flex flex-wrap items-center bg-slate-100 rounded-full p-1 text-[11px] sm:text-xs border border-slate-200 shadow-sm"
         >
           <button
             type="button"
             @click="currentStatusFilter = 'all'"
             class="px-3 py-1 rounded-full transition"
-            :class="
-              currentStatusFilter === 'all'
-                ? 'bg-white shadow-sm text-slate-900'
-                : 'text-slate-600 hover:text-slate-900'
-            "
+            :class="currentStatusFilter === 'all'
+              ? 'bg-white shadow-sm text-slate-900'
+              : 'text-slate-600 hover:text-slate-900'"
           >
             Tümü
           </button>
@@ -35,11 +35,9 @@
             type="button"
             @click="currentStatusFilter = 'bekleyen'"
             class="px-3 py-1 rounded-full transition"
-            :class="
-              currentStatusFilter === 'bekleyen'
-                ? 'bg-white shadow-sm text-slate-900'
-                : 'text-slate-600 hover:text-slate-900'
-            "
+            :class="currentStatusFilter === 'bekleyen'
+              ? 'bg-white shadow-sm text-slate-900'
+              : 'text-slate-600 hover:text-slate-900'"
           >
             Bekleyen cihazlar
           </button>
@@ -47,11 +45,9 @@
             type="button"
             @click="currentStatusFilter = 'tamir'"
             class="px-3 py-1 rounded-full transition"
-            :class="
-              currentStatusFilter === 'tamir'
-                ? 'bg-white shadow-sm text-slate-900'
-                : 'text-slate-600 hover:text-slate-900'
-            "
+            :class="currentStatusFilter === 'tamir'
+              ? 'bg-white shadow-sm text-slate-900'
+              : 'text-slate-600 hover:text-slate-900'"
           >
             Tamir bekleyen
           </button>
@@ -69,10 +65,12 @@
     </header>
 
     <!-- KÜÇÜK DASHBOARD KUTULARI -->
-    <div class="w-full flex flex-wrap gap-4 mb-6">
+    <div
+      class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6"
+    >
       <!-- Aktif cihaz -->
       <div
-        class="flex items-center gap-3 bg-white border border-slate-200 rounded-lg shadow p-3 flex-1 min-w-[160px] sm:min-w-[200px]"
+        class="flex items-center gap-3 bg-white border border-slate-200 rounded-xl shadow-sm p-3"
       >
         <div
           class="w-10 h-10 bg-slate-900 text-white rounded-full flex items-center justify-center text-lg"
@@ -80,14 +78,18 @@
           💼
         </div>
         <div>
-          <div class="text-[11px] text-slate-500">Aktif</div>
-          <div class="text-lg md:text-xl font-semibold">{{ totalActive }}</div>
+          <div class="text-[11px] text-slate-500 uppercase tracking-wide">
+            Aktif
+          </div>
+          <div class="text-lg md:text-xl font-semibold text-slate-900">
+            {{ totalActive }}
+          </div>
         </div>
       </div>
 
       <!-- Bekleyen -->
       <div
-        class="flex items-center gap-3 bg-white border border-slate-200 rounded-lg shadow p-3 flex-1 min-w-[160px] sm:min-w-[200px]"
+        class="flex items-center gap-3 bg-white border border-slate-200 rounded-xl shadow-sm p-3"
       >
         <div
           class="w-10 h-10 bg-orange-500 text-white rounded-full flex items-center justify-center text-lg"
@@ -95,14 +97,18 @@
           ⏳
         </div>
         <div>
-          <div class="text-[11px] text-slate-500">Bekleyen</div>
-          <div class="text-lg md:text-xl font-semibold">{{ totalBekleyen }}</div>
+          <div class="text-[11px] text-slate-500 uppercase tracking-wide">
+            Bekleyen
+          </div>
+          <div class="text-lg md:text-xl font-semibold text-slate-900">
+            {{ totalBekleyen }}
+          </div>
         </div>
       </div>
 
       <!-- Tamir Bekleyen -->
       <div
-        class="flex items-center gap-3 bg-white border border-slate-200 rounded-lg shadow p-3 flex-1 min-w-[160px] sm:min-w-[200px]"
+        class="flex items-center gap-3 bg-white border border-slate-200 rounded-xl shadow-sm p-3"
       >
         <div
           class="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center text-lg"
@@ -110,14 +116,18 @@
           🛠️
         </div>
         <div>
-          <div class="text-[11px] text-slate-500">Tamir</div>
-          <div class="text-lg md:text-xl font-semibold">{{ totalTamir }}</div>
+          <div class="text-[11px] text-slate-500 uppercase tracking-wide">
+            Tamir
+          </div>
+          <div class="text-lg md:text-xl font-semibold text-slate-900">
+            {{ totalTamir }}
+          </div>
         </div>
       </div>
 
       <!-- Teslim Edilen -->
       <div
-        class="flex items-center gap-3 bg-white border border-slate-200 rounded-lg shadow p-3 flex-1 min-w-[160px] sm:min-w-[200px]"
+        class="flex items-center gap-3 bg-white border border-slate-200 rounded-xl shadow-sm p-3"
       >
         <div
           class="w-10 h-10 bg-green-600 text-white rounded-full flex items-center justify-center text-lg"
@@ -125,20 +135,27 @@
           📦
         </div>
         <div>
-          <div class="text-[11px] text-slate-500">Teslim</div>
-          <div class="text-lg md:text-xl font-semibold">{{ totalArchived }}</div>
+          <div class="text-[11px] text-slate-500 uppercase tracking-wide">
+            Teslim
+          </div>
+          <div class="text-lg md:text-xl font-semibold text-slate-900">
+            {{ totalArchived }}
+          </div>
         </div>
       </div>
     </div>
 
     <!-- ANA LAYOUT: FORM + LİSTE -->
-    <section class="flex flex-col lg:flex-row gap-6">
+    <!-- xl'den önce dikey, xl ve üstü yan yana -->
+    <section class="flex flex-col xl:flex-row gap-6">
       <!-- Sol: Cihaz ekleme / düzenleme formu -->
-      <div class="bg-white rounded-xl shadow p-4 sm:p-6 w-full lg:max-w-xl text-sm">
+      <div
+        class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6 w-full xl:max-w-xl text-sm"
+      >
         <div
           class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2"
         >
-          <h2 class="text-sm sm:text-base font-semibold">
+          <h2 class="text-sm sm:text-base font-semibold text-slate-900">
             {{ editingDeviceId ? "Cihaz Kaydı Düzenle" : "Yeni Cihaz Kaydı" }}
           </h2>
 
@@ -153,22 +170,26 @@
         <div class="space-y-4">
           <!-- Müşteri adı -->
           <div>
-            <label class="block text-sm font-medium mb-1"> Müşteri Adı </label>
+            <label class="block text-sm font-medium mb-1 text-slate-700">
+              Müşteri Adı
+            </label>
             <input
               v-model="deviceForm.customerName"
               type="text"
-              class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white"
               placeholder="Örn: Ali Yılmaz"
             />
           </div>
 
           <!-- Telefon -->
           <div>
-            <label class="block text-sm font-medium mb-1"> Telefon </label>
+            <label class="block text-sm font-medium mb-1 text-slate-700">
+              Telefon
+            </label>
             <input
               v-model="deviceForm.phone"
               type="tel"
-              class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white"
               placeholder="Örn: 05xx xxx xx xx"
             />
           </div>
@@ -176,31 +197,37 @@
           <!-- Tür / Marka / Model -->
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
-              <label class="block text-sm font-medium mb-1"> Tür </label>
+              <label class="block text-sm font-medium mb-1 text-slate-700">
+                Tür
+              </label>
               <input
                 v-model="deviceForm.type"
                 type="text"
-                class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white"
                 placeholder="Örn: Telefon, Laptop"
               />
             </div>
 
             <div>
-              <label class="block text-sm font-medium mb-1"> Marka </label>
+              <label class="block text-sm font-medium mb-1 text-slate-700">
+                Marka
+              </label>
               <input
                 v-model="deviceForm.brand"
                 type="text"
-                class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white"
                 placeholder="Örn: Apple, Samsung"
               />
             </div>
 
             <div>
-              <label class="block text-sm font-medium mb-1"> Model </label>
+              <label class="block text-sm font-medium mb-1 text-slate-700">
+                Model
+              </label>
               <input
                 v-model="deviceForm.model"
                 type="text"
-                class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white"
                 placeholder="Örn: iPhone 11"
               />
             </div>
@@ -208,36 +235,38 @@
 
           <!-- Seri numarası -->
           <div>
-            <label class="block text-sm font-medium mb-1">
+            <label class="block text-sm font-medium mb-1 text-slate-700">
               Seri Numarası
             </label>
             <input
               v-model="deviceForm.serialNumber"
               type="text"
-              class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white"
               placeholder="Örn: SN123456789"
             />
           </div>
 
           <!-- Açıklama / Not -->
           <div>
-            <label class="block text-sm font-medium mb-1">
+            <label class="block text-sm font-medium mb-1 text-slate-700">
               Açıklama / Not (isteğe bağlı)
             </label>
             <textarea
               v-model="deviceForm.description"
               rows="2"
-              class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white"
               placeholder="Örn: Cihazda çizikler var, garanti dışı, müşteri yedek cihaz istemiyor..."
             ></textarea>
           </div>
 
           <!-- Durum -->
           <div>
-            <label class="block text-sm font-medium mb-1"> Cihaz Durumu </label>
+            <label class="block text-sm font-medium mb-1 text-slate-700">
+              Cihaz Durumu
+            </label>
             <select
               v-model="deviceForm.status"
-              class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+              class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white"
             >
               <option>Serviste</option>
               <option>Bekliyor</option>
@@ -268,18 +297,20 @@
       </div>
 
       <!-- Sağ: GÜNCEL cihaz listesi (Teslim Edildi HARİÇ) -->
-      <div class="flex-1 bg-white rounded-xl shadow p-3 sm:p-4 text-sm">
+      <div
+        class="flex-1 bg-white rounded-2xl shadow-sm border border-slate-200 p-3 sm:p-4 text-sm"
+      >
         <div
           class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 gap-2"
         >
-          <h2 class="text-sm sm:text-base font-semibold text-slate-800">
+          <h2 class="text-sm sm:text-base font-semibold text-slate-900">
             Güncel Cihazlar
           </h2>
 
           <input
             v-model="searchTerm"
             type="text"
-            class="border rounded-md px-2 py-1 text-[11px] sm:text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-64"
+            class="border rounded-md px-2 py-1 text-[11px] sm:text-xs focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 w-full sm:w-64 bg-white"
             placeholder="Müşteri, telefon, cihaz veya seri no ara..."
           />
         </div>
@@ -295,26 +326,26 @@
           <!-- Mobilde yatay kaydırılabilir tablo -->
           <div class="overflow-x-auto">
             <table
-              class="w-full min-w-[720px] text-left text-[11px] sm:text-xs border-collapse"
+              class="w-full min-w-[640px] text-left text-[11px] sm:text-xs border-collapse"
             >
               <thead>
-                <tr class="border-b text-slate-500">
-                  <th class="py-2">Müşteri</th>
-                  <th class="py-2">Telefon</th>
-                  <th class="py-2">Cihaz</th>
-                  <th class="py-2">Seri No</th>
-                  <th class="py-2">Durum</th>
-                  <th class="py-2 text-right">İşlemler</th>
+                <tr class="border-b text-slate-500 bg-slate-50">
+                  <th class="py-2 pr-2 font-medium">Müşteri</th>
+                  <th class="py-2 pr-2 font-medium">Telefon</th>
+                  <th class="py-2 pr-2 font-medium">Cihaz</th>
+                  <th class="py-2 pr-2 font-medium">Seri No</th>
+                  <th class="py-2 pr-2 font-medium">Durum</th>
+                  <th class="py-2 pl-2 font-medium text-right">İşlemler</th>
                 </tr>
               </thead>
               <tbody>
                 <tr
                   v-for="d in filteredDevices"
                   :key="d.id"
-                  class="border-b last:border-0 text-slate-700 align-top"
+                  class="border-b last:border-0 text-slate-700 align-top hover:bg-slate-50/60"
                 >
                   <td class="py-2 pr-2">
-                    <div class="font-semibold">
+                    <div class="font-semibold text-slate-800">
                       {{ d.customerName || "-" }}
                     </div>
                   </td>
@@ -326,7 +357,7 @@
                   </td>
 
                   <td class="py-2 pr-2">
-                    <div class="font-semibold">
+                    <div class="font-semibold text-slate-800">
                       {{ d.type }} {{ d.brand }} {{ d.model }}
                     </div>
                     <div
@@ -382,7 +413,7 @@
           class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 px-4 py-3 border-b"
         >
           <div>
-            <h3 class="text-sm sm:text-base font-semibold">
+            <h3 class="text-sm sm:text-base font-semibold text-slate-900">
               Geçmiş Cihazlar (Teslim Edilenler)
             </h3>
             <p class="text-[11px] text-slate-500">
@@ -394,7 +425,7 @@
             <input
               v-model="historySearchTerm"
               type="text"
-              class="border rounded-md px-2 py-1 text-[11px] sm:text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 w-32 sm:w-48"
+              class="border rounded-md px-2 py-1 text-[11px] sm:text-xs focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 w-32 sm:w-48 bg-white"
               placeholder="Ara..."
             />
             <button
@@ -418,26 +449,26 @@
 
           <div v-else class="overflow-x-auto">
             <table
-              class="w-full min-w-[720px] text-left text-[11px] sm:text-xs border-collapse"
+              class="w-full min-w-[640px] text-left text-[11px] sm:text-xs border-collapse"
             >
               <thead>
-                <tr class="border-b text-slate-500">
-                  <th class="py-2">Müşteri</th>
-                  <th class="py-2">Telefon</th>
-                  <th class="py-2">Cihaz</th>
-                  <th class="py-2">Seri No</th>
-                  <th class="py-2">Durum</th>
-                  <th class="py-2">Teslim Tarihi</th>
+                <tr class="border-b text-slate-500 bg-slate-50">
+                  <th class="py-2 pr-2 font-medium">Müşteri</th>
+                  <th class="py-2 pr-2 font-medium">Telefon</th>
+                  <th class="py-2 pr-2 font-medium">Cihaz</th>
+                  <th class="py-2 pr-2 font-medium">Seri No</th>
+                  <th class="py-2 pr-2 font-medium">Durum</th>
+                  <th class="py-2 pr-2 font-medium">Teslim Tarihi</th>
                 </tr>
               </thead>
               <tbody>
                 <tr
                   v-for="d in filteredArchivedDevices"
                   :key="d.id"
-                  class="border-b last:border-0 text-slate-700 align-top"
+                  class="border-b last:border-0 text-slate-700 align-top hover:bg-slate-50/60"
                 >
                   <td class="py-2 pr-2">
-                    <div class="font-semibold">
+                    <div class="font-semibold text-slate-800">
                       {{ d.customerName || "-" }}
                     </div>
                   </td>
@@ -449,7 +480,7 @@
                   </td>
 
                   <td class="py-2 pr-2">
-                    <div class="font-semibold">
+                    <div class="font-semibold text-slate-800">
                       {{ d.type }} {{ d.brand }} {{ d.model }}
                     </div>
                     <div
@@ -497,7 +528,6 @@
     </div>
   </div>
 </template>
-
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
@@ -662,8 +692,7 @@ const filteredDevices = computed(() => {
   } else if (currentStatusFilter.value === "tamir") {
     base = base.filter(
       (d) =>
-        d.status === "Serviste" ||
-        d.status === "Yedek Parça Bekleniyor"
+        d.status === "Serviste" || d.status === "Yedek Parça Bekleniyor"
     );
   }
 
@@ -672,10 +701,9 @@ const filteredDevices = computed(() => {
   return base.filter((d) => {
     const customer = d.customerName?.toLowerCase() || "";
     const phone = d.phone?.toLowerCase() || "";
-    const deviceText =
-      `${d.type || ""} ${d.brand || ""} ${d.model || ""} ${
-        d.serialNumber || ""
-      }`.toLowerCase();
+    const deviceText = `${d.type || ""} ${d.brand || ""} ${
+      d.model || ""
+    } ${d.serialNumber || ""}`.toLowerCase();
     const desc = d.description?.toLowerCase() || "";
 
     return (
@@ -697,10 +725,9 @@ const filteredArchivedDevices = computed(() => {
   return base.filter((d) => {
     const customer = d.customerName?.toLowerCase() || "";
     const phone = d.phone?.toLowerCase() || "";
-    const deviceText =
-      `${d.type || ""} ${d.brand || ""} ${d.model || ""} ${
-        d.serialNumber || ""
-      }`.toLowerCase();
+    const deviceText = `${d.type || ""} ${d.brand || ""} ${
+      d.model || ""
+    } ${d.serialNumber || ""}`.toLowerCase();
     const desc = d.description?.toLowerCase() || "";
 
     return (

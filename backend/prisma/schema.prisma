@@ -8,18 +8,29 @@ datasource db {
 }
 
 model Company {
-  id           Int       @id @default(autoincrement())
+  id           Int      @id @default(autoincrement())
   name         String
-  email        String    @unique
+  email        String   @unique
   passwordHash String
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  products     Product[]  
+
+  contactPerson String?
+  phone         String?
+  username      String?
+  isActive      Boolean @default(true)
+  modules       String  @default("{}") 
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  products     Product[]
   devices      Device[]
   repairs      Repair[]
   sales        Sale[]
   suppliers    Supplier[]
+  stockMovements StockMovement[]
 }
+
+
 
 model Device {
   id           Int      @id @default(autoincrement())
@@ -77,6 +88,7 @@ model Product {
 
   priceHistory ProductPriceHistory[]
   sales        Sale[]  
+  stockMovements StockMovement[]
 }
 
 model ProductPriceHistory {
@@ -100,9 +112,11 @@ model Sale {
   quantity  Int      @default(1)
   price     Float
   date      DateTime @default(now())
-
+  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  totalAmount Float @default(0)
 }
 
 model Supplier {
@@ -119,4 +133,27 @@ model Supplier {
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String
+  role         String   @default("ADMIN") // ADMIN, STAFF
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model StockMovement {
+  id        Int      @id @default(autoincrement())
+  company   Company  @relation(fields: [companyId], references: [id])
+  companyId Int
+
+  product   Product  @relation(fields: [productId], references: [id])
+  productId Int
+
+  type      String   // "IN" veya "OUT"
+  quantity  Int
+  reason    String?  // "SALE", "MANUAL", "CORRECTION" vs.
+  createdAt DateTime @default(now())
 }

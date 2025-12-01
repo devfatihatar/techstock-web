@@ -1,11 +1,18 @@
+
+
+
 import { createApp } from "vue";
+import { createPinia } from "pinia";
 import App from "./App.vue";
 import router from "./router";
-
-import "./main.css"; // sen ne kullanıyorsan
-
+import { useAuthStore } from "./stores/auth";
+import "../src/main.css"; 
 const app = createApp(App);
-
+const pinia = createPinia();
+app.use(pinia);
 app.use(router);
+
+const auth = useAuthStore();
+auth.hydrateFromStorage(); // 🔥 token + user'ı geri yükle
 
 app.mount("#app");

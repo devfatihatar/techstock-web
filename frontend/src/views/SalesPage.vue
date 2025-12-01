@@ -1,5 +1,5 @@
 <template>
-  <div class="pb-24 min-h-[130vh]">
+  <div class="min-h-screen bg-[#f5f5f0] px-4 sm:px-6 lg:px-8 py-6 pb-24">
     <!-- Üst başlık -->
     <header
       class="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between"
@@ -72,9 +72,10 @@
     </section>
 
     <!-- Ana layout: Satış formu + Bugünkü satışlar -->
-    <section class="flex flex-col lg:flex-row gap-6">
+    <!-- xl'den önce dikey, xl ve üstü yan yana -->
+    <section class="flex flex-col xl:flex-row gap-6">
       <!-- Satış formu -->
-      <div class="bg-white rounded-xl shadow p-4 sm:p-6 w-full lg:max-w-xl">
+      <div class="bg-white rounded-xl shadow p-4 sm:p-6 w-full xl:max-w-xl">
         <h2 class="text-base sm:text-lg font-semibold mb-4">Satış Ekle</h2>
 
         <div class="space-y-4 text-sm">
@@ -163,7 +164,7 @@
           <!-- Mobilde yatay kaydırılabilir tablo -->
           <div class="overflow-x-auto">
             <table
-              class="w-full min-w-[720px] text-left text-[11px] sm:text-xs border-collapse"
+              class="w-full min-w-[640px] text-left text-[11px] sm:text-xs border-collapse"
             >
               <thead>
                 <tr class="border-b text-slate-500">
@@ -227,7 +228,7 @@
       </div>
 
       <div
-        v-if="last7DaysReports.length === 0"
+        v-if="last7DaysPoints.length === 0"
         class="text-slate-500 text-xs sm:text-sm"
       >
         Henüz raporlanacak satış bulunmuyor.
@@ -236,7 +237,7 @@
       <template v-else>
         <div class="overflow-x-auto">
           <table
-            class="w-full min-w-[720px] text-left text-[11px] sm:text-xs border-collapse"
+            class="w-full min-w-[640px] text-left text-[11px] sm:text-xs border-collapse"
           >
             <!-- Buraya kendi tablo thead/tbody yapın, orijinalinle aynı kalsın -->
             <!-- ... -->
@@ -337,7 +338,7 @@
       <div v-else class="max-h-80 overflow-y-auto">
         <div class="overflow-x-auto">
           <table
-            class="w-full min-w-[720px] text-left text-[11px] sm:text-xs border-collapse"
+            class="w-full min-w-[640px] text-left text-[11px] sm:text-xs border-collapse"
           >
             <thead>
               <tr class="border-b text-slate-500">
@@ -397,28 +398,53 @@ import api from "../api/client";
 import { BarChart } from "vue-chart-3";
 import { Chart, registerables } from "chart.js";
 
-Chart.register(...registerables);
+// Chart.js kayıt (zaten projede böyle kullanıyordun)
+if (!Chart._fatihRegistered) {
+  Chart.register(...registerables);
+  Chart._fatihRegistered = true; // aynı dosya iki kez yüklenirse tekrar register etmesin
+}
 
 // 🔹 Ayarlar (localStorage)
-const SETTINGS_STORAGE_KEY = "simge-settings";
-
 const settings = ref({
-  companyName: "Simge Bilgisayar",
-  userName: "Fatih",
+  companyName: "Firma",
+  userName: "Kullanıcı",
 });
 
-const storedSettings = localStorage.getItem(SETTINGS_STORAGE_KEY);
-if (storedSettings) {
+function loadSettingsFromLocal() {
   try {
-    const parsed = JSON.parse(storedSettings);
-    settings.value = {
-      ...settings.value,
-      ...parsed,
-    };
+    const companyRaw = localStorage.getItem("ts_company");
+    const userRaw = localStorage.getItem("ts_user");
+
+    if (companyRaw) {
+      const company = JSON.parse(companyRaw);
+      // Buradaki field isimlerini kendi backend’ine göre uyarlayabilirsin
+      settings.value.companyName =
+        company.name ||
+        company.companyName ||
+        settings.value.companyName;
+    }
+
+    if (userRaw) {
+      const user = JSON.parse(userRaw);
+      settings.value.userName =
+        user.fullName ||
+        user.name ||
+        user.username ||
+        user.email ||
+        settings.value.userName;
+    }
   } catch (e) {
-    console.error("Settings parse error:", e);
+    console.error("localStorage settings parse error:", e);
   }
 }
+
+// component mount olduğunda oku
+onMounted(async () => {
+  loadSettingsFromLocal();
+  // SalesPage’de burada zaten loadProducts(), loadSales() çağırıyorsun,
+  // StockPage’de loadProducts() çağırıyorsun, onlar kalsın.
+});
+
 
 // 🔹 Ürünler ve satışlar
 const products = ref([]);
@@ -442,7 +468,11 @@ const historyFilters = ref({
 async function loadProducts() {
   try {
     const res = await api.get("/products");
-    products.value = Array.isArray(res.data) ? res.data : [];
+    const raw = Array.isArray(res.data) ? res.data : [];
+    products.value = raw.map((p) => ({
+      ...p,
+      quantity: p.quantity != null ? Number(p.quantity) : 0,
+    }));
   } catch (e) {
     console.error("Ürünler alınırken hata:", e);
     products.value = [];
@@ -465,17 +495,30 @@ async function loadSales() {
         s.itemName ||
         "";
 
+      const rawDate = s.date || s.createdAt;
+      let isoDate = null;
+      if (rawDate) {
+        const d = new Date(rawDate);
+        if (!isNaN(d.getTime())) {
+          isoDate = d.toISOString();
+        }
+      }
+
+      const price =
+        s.price != null
+          ? Number(s.price)
+          : s.totalPrice != null
+          ? Number(s.totalPrice)
+          : 0;
+
+      const quantity = s.quantity != null ? Number(s.quantity) : 1;
+
       return {
         ...s,
         productName,
-        quantity: s.quantity != null ? s.quantity : 1,
-        price:
-          s.price != null
-            ? Number(s.price)
-            : s.totalPrice != null
-            ? Number(s.totalPrice)
-            : 0,
-        date: s.date || s.createdAt,
+        price: Number.isFinite(price) ? price : 0,
+        quantity: Number.isFinite(quantity) ? quantity : 1,
+        date: isoDate, // null olabilir ama tüm hesaplarda guard var
         customer: s.customer || s.customerName || "",
       };
     });
@@ -503,7 +546,7 @@ const saleForm = ref({
 
 // 🧾 Geçmiş satışlar (modal) – filtreli liste
 const filteredHistorySales = computed(() => {
-  let list = [...sales.value];
+  let list = Array.isArray(sales.value) ? [...sales.value] : [];
 
   const product = historyFilters.value.product.trim().toLowerCase();
   const customer = historyFilters.value.customer.trim().toLowerCase();
@@ -523,17 +566,24 @@ const filteredHistorySales = computed(() => {
   }
 
   if (start) {
-    list = list.filter((s) => s.date && s.date.slice(0, 10) >= start);
+    list = list.filter(
+      (s) => s.date && s.date.slice(0, 10) >= start
+    );
   }
 
   if (end) {
-    list = list.filter((s) => s.date && s.date.slice(0, 10) <= end);
+    list = list.filter(
+      (s) => s.date && s.date.slice(0, 10) <= end
+    );
   }
 
-  return list.sort((a, b) => (a.date < b.date ? 1 : -1));
+  return list.sort((a, b) => {
+    if (!a.date || !b.date) return 0;
+    return a.date < b.date ? 1 : -1;
+  });
 });
 
-// 🔹 SATIŞ KAYDET (backend'e gönder)
+// 🔹 SATIŞ KAYDET
 async function addSale() {
   if (!saleForm.value.productId) {
     alert("Lütfen bir ürün seçin.");
@@ -557,14 +607,10 @@ async function addSale() {
       customer: saleForm.value.customer || null,
     };
 
-    console.log("Gönderilen satış payload:", payload);
-
     await api.post("/sales", payload);
 
-    // Satış başarılı -> hem satışları hem ürünleri (stok) tazele
     await Promise.all([loadSales(), loadProducts()]);
 
-    // Formu sıfırla
     saleForm.value = {
       productId: null,
       quantity: 1,
@@ -586,53 +632,62 @@ async function addSale() {
 const todayStr = new Date().toISOString().slice(0, 10);
 
 const todaySales = computed(() =>
-  sales.value.filter((s) => s.date && s.date.slice(0, 10) === todayStr)
+  (sales.value || []).filter(
+    (s) => s.date && s.date.slice(0, 10) === todayStr
+  )
 );
 
 const todaySalesCount = computed(() => todaySales.value.length);
 
 const todaySalesTotal = computed(() =>
-  todaySales.value.reduce(
-    (sum, s) => sum + (s.price || 0) * (s.quantity || 0),
-    0
-  )
+  todaySales.value.reduce((sum, s) => {
+    const price = Number(s.price) || 0;
+    const qty = Number(s.quantity) || 0;
+    return sum + price * qty;
+  }, 0)
 );
 
-// okunabilir tarih
-const todayReadable = computed(() => new Date().toLocaleDateString("tr-TR"));
+const todayReadable = computed(() =>
+  new Date().toLocaleDateString("tr-TR")
+);
 
-// 🔹 Günlük raporlar (tarihe göre gruplanmış)
-const dailyReports = computed(() => {
-  const map = new Map();
+// 🔹 Son 7 gün – direkt points hesapla (gün güvenli)
+const last7DaysPoints = computed(() => {
+  const today = new Date();
+  const points = [];
 
-  for (const s of sales.value) {
-    if (!s.date) continue;
-    const d = s.date.slice(0, 10); // YYYY-MM-DD
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(today.getDate() - i);
 
-    if (!map.has(d)) {
-      map.set(d, { date: d, count: 0, total: 0 });
-    }
+    const key = d.toISOString().slice(0, 10); // YYYY-MM-DD
 
-    const r = map.get(d);
-    r.count += 1;
-    r.total += (s.price || 0) * (s.quantity || 0);
+    const total = (sales.value || [])
+      .filter((s) => s.date && s.date.slice(0, 10) === key)
+      .reduce((sum, s) => {
+        const price = Number(s.price) || 0;
+        const qty = Number(s.quantity) || 0;
+        return sum + price * qty;
+      }, 0);
+
+    const label = d.toLocaleDateString("tr-TR", {
+      day: "2-digit",
+      month: "2-digit",
+    });
+
+    points.push({ label, total });
   }
 
-  return Array.from(map.values()).sort((a, b) => (a.date < b.date ? 1 : -1));
+  return points;
 });
-
-// 🔹 Son 7 gün
-const last7DaysReports = computed(() => dailyReports.value.slice(0, 7));
 
 // 📊 Grafik label & data
 const chartLabels = computed(() =>
-  last7DaysReports.value
-    .map((r) => new Date(r.date).toLocaleDateString("tr-TR"))
-    .reverse()
+  last7DaysPoints.value.map((p) => p.label)
 );
 
 const chartData = computed(() =>
-  last7DaysReports.value.map((r) => r.total).reverse()
+  last7DaysPoints.value.map((p) => p.total)
 );
 
 const barChartData = computed(() => ({
@@ -652,26 +707,17 @@ const barChartOptions = {
   responsive: true,
   maintainAspectRatio: false,
   layout: {
-    padding: {
-      top: 5,
-      bottom: 5,
-      left: 5,
-      right: 5,
-    },
+    padding: { top: 5, bottom: 5, left: 5, right: 5 },
   },
   scales: {
     x: {
       ticks: {
-        font: {
-          size: 10,
-        },
+        font: { size: 10 },
       },
     },
     y: {
       ticks: {
-        font: {
-          size: 10,
-        },
+        font: { size: 10 },
       },
       beginAtZero: true,
     },
@@ -679,9 +725,7 @@ const barChartOptions = {
   plugins: {
     legend: {
       labels: {
-        font: {
-          size: 10,
-        },
+        font: { size: 10 },
       },
     },
   },
@@ -691,11 +735,13 @@ const barChartOptions = {
 const currentMonthKey = new Date().toISOString().slice(0, 7); // "YYYY-MM"
 
 const currentMonthTotal = computed(() =>
-  sales.value.reduce((sum, s) => {
+  (sales.value || []).reduce((sum, s) => {
     if (!s.date) return sum;
-    return s.date.slice(0, 7) === currentMonthKey
-      ? sum + (s.price || 0) * (s.quantity || 0)
-      : sum;
+    if (s.date.slice(0, 7) !== currentMonthKey) return sum;
+
+    const price = Number(s.price) || 0;
+    const qty = Number(s.quantity) || 0;
+    return sum + price * qty;
   }, 0)
 );
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="min-h-screen bg-[#f5f5f0] px-4 sm:px-6 lg:px-8 py-6 pb-24">
     <!-- Başlık -->
     <header
       class="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between"
@@ -16,56 +16,50 @@
 
     <section class="flex flex-col lg:flex-row gap-6">
       <!-- Sol: Tedarikçi ekleme formu -->
-      <div class="bg-white rounded-xl shadow p-4 sm:p-6 w-full lg:max-w-xl text-sm">
+      <div
+        class="bg-white rounded-xl shadow p-4 sm:p-6 w-full lg:max-w-xl text-sm"
+      >
         <h2 class="text-sm sm:text-base font-semibold mb-4">
           Yeni Tedarikçi Ekle
         </h2>
 
         <div class="space-y-4">
           <div>
-            <label class="block text-sm font-medium mb-1">
-              Firma Adı
-            </label>
+            <label class="block text-sm font-medium mb-1"> Firma Adı </label>
             <input
               v-model="supplierForm.companyName"
               type="text"
-              class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
               placeholder="Örn: Simge Bilgisayar"
             />
           </div>
 
           <div>
-            <label class="block text-sm font-medium mb-1">
-              Yetkili Adı
-            </label>
+            <label class="block text-sm font-medium mb-1"> Yetkili Adı </label>
             <input
               v-model="supplierForm.contactName"
               type="text"
-              class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
               placeholder="Örn: Ali Yılmaz"
             />
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-sm font-medium mb-1">
-                Telefon
-              </label>
+              <label class="block text-sm font-medium mb-1"> Telefon </label>
               <input
                 v-model="supplierForm.phone"
                 type="text"
-                class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                 placeholder="Örn: 05xx xxx xx xx"
               />
             </div>
             <div>
-              <label class="block text-sm font-medium mb-1">
-                E-posta
-              </label>
+              <label class="block text-sm font-medium mb-1"> E-posta </label>
               <input
                 v-model="supplierForm.email"
                 type="email"
-                class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                 placeholder="Örn: info@firma.com"
               />
             </div>
@@ -78,7 +72,7 @@
             <textarea
               v-model="supplierForm.address"
               rows="2"
-              class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
               placeholder="Adres bilgisi"
             ></textarea>
           </div>
@@ -90,24 +84,23 @@
             <textarea
               v-model="supplierForm.notes"
               rows="2"
-              class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
               placeholder="Örn: SSD, RAM tedarik ediyor"
             ></textarea>
           </div>
 
           <button
-  @click="addSupplier"
-  :disabled="saving"
-  class="w-full mt-2 bg-slate-900 disabled:opacity-60 disabled:cursor-not-allowed text-white font-medium py-2.5 rounded-md text-sm hover:bg-slate-800 active:scale-[0.99] transition"
->
-  Tedarikçiyi Kaydet
-</button>
-
+            @click="addSupplier"
+            :disabled="saving"
+            class="w-full mt-2 bg-slate-900 disabled:opacity-60 disabled:cursor-not-allowed text-white font-medium py-2.5 rounded-md text-sm hover:bg-slate-800 active:scale-[0.99] transition"
+          >
+            Tedarikçiyi Kaydet
+          </button>
         </div>
       </div>
 
       <!-- Sağ: Tedarikçi listesi -->
-      <div class="flex-1 bg-white rounded-xl shadow p-4 text-sm">
+      <div class="flex-1 bg-white rounded-xl shadow p-3 sm:p-4 text-sm">
         <div
           class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 gap-2"
         >
@@ -118,7 +111,7 @@
           <input
             v-model="searchTerm"
             type="text"
-            class="border rounded-md px-2 py-1 text-[11px] sm:text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="border rounded-md px-2 py-1 text-[11px] sm:text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
             placeholder="Firma veya yetkili ara..."
           />
         </div>
@@ -160,10 +153,7 @@
                     >
                       {{ s.address }}
                     </div>
-                    <div
-                      v-if="s.notes"
-                      class="text-[11px] text-slate-500 mt-1"
-                    >
+                    <div v-if="s.notes" class="text-[11px] text-slate-500 mt-1">
                       Not: {{ s.notes }}
                     </div>
                   </td>
@@ -185,7 +175,6 @@
     </section>
   </div>
 </template>
-
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
@@ -225,8 +214,7 @@ async function loadSuppliers() {
   } catch (e) {
     console.error("Tedarikçiler alınırken hata:", e);
     error.value =
-      e?.response?.data?.message ||
-      "Tedarikçiler alınırken bir hata oluştu.";
+      e?.response?.data?.message || "Tedarikçiler alınırken bir hata oluştu.";
     suppliers.value = [];
   } finally {
     loading.value = false;
@@ -273,8 +261,7 @@ async function addSupplier() {
   } catch (e) {
     console.error("Tedarikçi kaydedilirken hata:", e);
     error.value =
-      e?.response?.data?.message ||
-      "Tedarikçi kaydedilirken bir hata oluştu.";
+      e?.response?.data?.message || "Tedarikçi kaydedilirken bir hata oluştu.";
     alert(error.value);
   } finally {
     saving.value = false;
@@ -293,4 +280,3 @@ const filteredSuppliers = computed(() => {
   });
 });
 </script>
-
